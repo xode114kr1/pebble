@@ -87,3 +87,72 @@ test: 회원가입 API 테스트 추가
 - 정상 요청 테스트 작성
 - 예외 케이스 테스트 추가
 ```
+
+# Pull Request Convention
+
+## PR Title Format
+
+```bash
+[type] 작업 내용 요약
+```
+
+### Example
+
+```bash
+[feat] 로그인 기능 구현
+[fix] 모바일 Safari 쿠키 문제 수정
+[refactor] API 요청 구조 개선
+```
+
+---
+
+## PR Description Template
+
+```md
+## Overview
+
+- 작업 목적 및 변경 사항 설명
+
+## Changes
+
+- 변경 사항 1
+- 변경 사항 2
+- 변경 사항 3
+
+## Screenshot
+
+- UI 변경 사항이 있다면 첨부
+
+## Test
+
+- [ ] 로컬 실행 확인
+- [ ] 빌드 성공
+- [ ] 기존 기능 동작 확인
+
+## Related Issues
+
+- close #이슈번호
+```
+
+---
+
+## PR Rules
+
+- PR은 하나의 목적만 가지도록 작성
+- 불필요한 코드 변경 포함 금지
+- UI 변경 시 스크린샷 첨부
+- 기능 변경 시 테스트 결과 포함
+- 리뷰 반영 후 squash merge 사용
+- merge 전 build/test 반드시 확인
+
+---
+
+## Recommended PR Types
+
+- feat : 새로운 기능 추가
+- fix : 버그 수정
+- refactor : 리팩토링
+- style : 스타일 수정
+- docs : 문서 수정
+- chore : 설정 및 기타 작업
+- test : 테스트 코드 작업
