@@ -1,36 +1,320 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ClimbLog
 
-## Getting Started
+클라이밍 기록 관리 및 커뮤니티 플랫폼
 
-First, run the development server:
+## 프로젝트 소개
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+ClimbLog는 클라이밍을 즐기는 사용자가 자신의 등반 기록을 체계적으로 관리하고, 암장 정보를 탐색하며, 다른 클라이머들과 소통할 수 있는 서비스입니다.
+
+사용자는 자신의 클라이밍 성장 과정을 기록하고, 암장별 스타일 및 난이도 체감을 투표 기반으로 확인할 수 있습니다.
+
+## 주요 기능
+
+### 1. 클라이밍 기록 관리
+
+사용자가 자신의 클라이밍 활동을 기록하고 통계를 확인할 수 있는 기능입니다.
+
+#### 기능 목록
+
+- 캘린더 기반 기록 작성
+- 날짜별 클라이밍 기록 조회
+- 방문한 암장 선택
+- 난이도별 기록 작성
+- 문제 색상 기록
+- 시도 개수 기록
+- 성공 개수 기록
+
+#### 기록 예시
+
+| 난이도 | 색상 | 시도 | 성공 |
+| ------ | ---- | ---- | ---- |
+| V3     | 노랑 | 5개  | 3개  |
+| V4     | 파랑 | 4개  | 1개  |
+| V5     | 빨강 | 2개  | 0개  |
+
+#### 통계 기능
+
+- 일별 성공률
+- 월별 성공률
+- 난이도별 성공률
+- 방문 암장 통계
+- 총 시도 횟수
+- 총 성공 횟수
+- 최고 성공 난이도
+
+#### 성공률 계산
+
+```text
+성공률 = 성공 문제 수 / 시도 문제 수 * 100
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+예시:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```text
+V4
+시도: 10개
+성공: 7개
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+성공률: 70%
+```
 
-## Learn More
+### 2. 암장 검색 및 평가
 
-To learn more about Next.js, take a look at the following resources:
+암장 정보를 검색하고 사용자 평가를 확인할 수 있는 기능입니다.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+#### 암장 검색
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- 암장 목록 조회
+- 지역별 검색
+- 이름 검색
+- 위치 확인
 
-## Deploy on Vercel
+#### 지도 기능
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- 지도에 암장 위치 표시
+- 네이버 지도 API 연동
+- 네이버 길찾기 이동 지원
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+예시:
+
+```text
+더클라임 강남점
+
+주소
+서울특별시 강남구 ...
+
+[길찾기]
+-> 네이버 지도 앱 실행
+```
+
+#### 암장 정보
+
+- 암장 이름
+- 지역
+- 주소
+- 위치 좌표
+- 대표 이미지
+
+#### 암장 평가 시스템
+
+사용자가 암장에 대해 투표 기반 평가를 남길 수 있습니다.
+
+체감 난이도 투표:
+
+- 쉬움
+- 어려움
+
+표시 예시:
+
+```text
+쉬움 63%
+어려움 15%
+
+[█████████████░░░]
+쉬움 63%
+```
+
+암장 스타일 투표:
+
+- 스태틱
+- 다이나믹
+
+표시 예시:
+
+```text
+스태틱 75%
+다이나믹 25%
+```
+
+투표 시스템 정책:
+
+- 사용자당 암장별 1회 투표 가능
+- 수정 시 기존 투표 갱신
+- 전체 투표 수 기반 퍼센트 계산
+
+### 3. 마이페이지
+
+사용자의 클라이밍 프로필 및 통계를 관리하는 기능입니다.
+
+#### 프로필 설정
+
+- 닉네임
+- 프로필 이미지
+- 클라이밍 시작일
+- 키(cm)
+- 암 리치(cm)
+
+#### D-Day 표시
+
+```text
+클라이밍 시작일
+2025.03.01
+
+클라이밍 경력
+D+450
+```
+
+#### 개인 통계
+
+기본 통계:
+
+- 총 방문 횟수
+- 총 시도 문제 수
+- 총 성공 문제 수
+- 전체 성공률
+
+난이도 통계:
+
+- V1 성공 수
+- V2 성공 수
+- V3 성공 수
+- 최고 성공 난이도
+
+암장 통계:
+
+- 가장 많이 방문한 암장
+- 암장별 성공률
+
+성장 그래프:
+
+- 월별 성공률 변화
+- 월별 클리어 수 변화
+- 난이도 성장 추이
+
+### 4. 커뮤니티
+
+클라이머 간 정보 공유를 위한 댓글형 커뮤니티입니다.
+
+#### 게시글
+
+- 글 작성
+- 글 수정
+- 글 삭제
+- 게시글 검색
+
+#### 댓글
+
+- 댓글 작성
+- 댓글 수정
+- 댓글 삭제
+
+#### 대댓글
+
+계층형 댓글 구조를 지원합니다.
+
+예시:
+
+```text
+A 사용자
+
+이 문제 발 힘들지 않나요?
+
+  ㄴ B 사용자
+     저는 왼발을 먼저 썼어요
+
+      ㄴ C 사용자
+         저도 그렇게 했습니다
+```
+
+#### 좋아요 기능
+
+- 게시글 좋아요
+- 댓글 좋아요
+
+#### 검색 기능
+
+- 제목 검색
+- 내용 검색
+- 작성자 검색
+
+#### 정렬 기능
+
+- 최신순
+- 인기순
+- 댓글순
+
+## 기술 스택
+
+### Frontend
+
+- Next.js
+- TypeScript
+- Tailwind CSS
+- React Query
+- Zustand
+
+### Backend
+
+- NestJS 또는 Express
+- Prisma
+- PostgreSQL
+
+### Infrastructure
+
+- AWS S3
+- AWS EC2
+- Docker
+- Nginx
+
+### External API
+
+- 네이버 지도 API
+- 네이버 길찾기 API
+
+## MVP 범위
+
+### 포함
+
+- 클라이밍 기록 작성
+- 암장 검색
+- 암장 평가 시스템
+- 마이페이지
+- 댓글형 커뮤니티
+- 좋아요 기능
+
+### 제외
+
+- 친구 기능
+- 랭킹 시스템
+- AI 추천
+- 실시간 채팅
+- 알림 기능
+
+## 향후 확장 기능
+
+### 랭킹 시스템
+
+- 지역별 랭킹
+- 월간 랭킹
+- 난이도별 랭킹
+
+### 친구 기능
+
+- 친구 추가
+- 친구 활동 조회
+- 친구 통계 비교
+
+### 뱃지 시스템
+
+- 첫 V5 성공
+- 첫 방문 기록
+- 100문제 클리어
+- 월간 출석 달성
+
+### AI 추천 기능
+
+사용자의 기록을 분석하여 다음 기능을 제공합니다.
+
+- 적절한 난이도 추천
+- 방문 암장 추천
+- 약점 유형 분석
+- 성장 추이 분석
+
+## 개발 시작
+
+```bash
+npm install
+npm run dev
+```
+
+브라우저에서 `http://localhost:3000`을 열어 확인합니다.
