@@ -15,9 +15,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="flex">
+      <body className="text-body-md flex h-screen w-full overflow-hidden bg-page text-on-surface">
         <SideNav />
-        <main className="flex grow flex-col">
+        <main className="flex grow flex-col overflow-y-auto bg-page pb-24 md:pb-8">
           <TopBar />
           {children}
         </main>
