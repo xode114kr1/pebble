@@ -51,8 +51,8 @@ export default function SideNav() {
     <aside className="hidden md:flex flex-col h-screen w-64 bg-surface-container-lowest border-r border-outline-variant p-md space-y-md shrink-0">
       <div className="flex items-center gap-3 px-sm mb-xl">
         <div className="flex flex-col">
-          <span className="flex gap-1 font-headline font-bold text-on-surface">
-            <Mountain size={25} />
+          <span className="flex gap-1 headline-md font-bold text-on-surface items-center">
+            <Mountain size={30} fill="currentColor" />
             Pebble
           </span>
         </div>
