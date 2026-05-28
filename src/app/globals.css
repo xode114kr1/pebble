@@ -41,3 +41,16 @@
 
   --radius-xl: 1.5rem;
 }
+
+@layer components {
+  .card {
+    @apply bg-white rounded-xl border border-[#D1D9E0] p-lg;
+    box-shadow: 0px 4px 20px rgba(20, 21, 31, 0.04);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .card:hover {
+    box-shadow: 0px 8px 24px rgba(101, 105, 154, 0.12);
+    transform: translateY(-2px);
+  }
+}
