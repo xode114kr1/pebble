@@ -1,6 +1,43 @@
+@import url("https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&family=Inter:wght@400;500&family=Geist:wght@400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap");
 @import "tailwindcss";
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
+}
+
+@theme {
+  --color-primary: #4d5180;
+  --color-on-primary: #ffffff;
+
+  --color-background: #fbf8ff;
+  --color-on-background: #1a1b25;
+
+  --color-surface: #fbf8ff;
+  --color-surface-container: #eeecfb;
+  --color-surface-container-low: #f4f2ff;
+  --color-surface-container-high: #e8e7f5;
+  --color-surface-container-highest: #e2e1f0;
+
+  --color-on-surface: #1a1b25;
+  --color-on-surface-variant: #46464f;
+
+  --color-outline: #777680;
+  --color-outline-variant: #c7c5d0;
+  --color-surface-variant: #e2e1f0;
+
+  --color-secondary-container: #c1e5f3;
+  --color-tertiary-container: #5e6e88;
+
+  --font-display: "Hanken Grotesk", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-label: "Geist", sans-serif;
+
+  --spacing-gutter: 16px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+
+  --radius-xl: 1.5rem;
 }
