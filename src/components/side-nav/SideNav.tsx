@@ -1,18 +1,26 @@
 "use client";
 
+import {
+  CirclePlus,
+  LayoutDashboard,
+  LucideIcon,
+  Map,
+  Mountain,
+  Users,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const navItems = [
-  { icon: "home", label: "Home", href: "/" },
-  { icon: "map", label: "Gym", href: "/gym" },
-  { icon: "add_circle", label: "Record", href: "/record" },
-  { icon: "group", label: "Community", href: "/community" },
+  { icon: LayoutDashboard, label: "Home", href: "/" },
+  { icon: Map, label: "Gym", href: "/gym" },
+  { icon: CirclePlus, label: "Record", href: "/record" },
+  { icon: Users, label: "Community", href: "/community" },
 ];
 
 type NavItemProps = {
   item: {
-    icon: string;
+    icon: LucideIcon;
     label: string;
     href: string;
   };
@@ -20,6 +28,7 @@ type NavItemProps = {
 };
 
 function NavItem({ item, isActive }: NavItemProps) {
+  const Icon = item.icon;
   return (
     <Link
       href={item.href}
@@ -29,6 +38,7 @@ function NavItem({ item, isActive }: NavItemProps) {
           : "flex items-center gap-3 px-4 py-3 text-on-surface-variant transition-all hover:bg-surface-container active:scale-95"
       }
     >
+      <Icon size={20} strokeWidth={2.25} />
       <span className="label-md">{item.label}</span>
     </Link>
   );
@@ -41,7 +51,8 @@ export default function SideNav() {
     <aside className="hidden md:flex flex-col h-screen w-64 bg-surface-container-lowest border-r border-outline-variant p-md space-y-md shrink-0">
       <div className="flex items-center gap-3 px-sm mb-xl">
         <div className="flex flex-col">
-          <span className="font-headline-md font-bold text-on-surface">
+          <span className="flex gap-1 font-headline font-bold text-on-surface">
+            <Mountain size={25} />
             Pebble
           </span>
         </div>
