@@ -58,7 +58,7 @@ export default function RecentSuccessRate() {
     <section className="card lg:col-span-4">
       <h2 className="text-headline-md mb-lg text-on-surface">Recent</h2>
       <div className="space-y-4">
-        {successRates.slice(0, 4).map((item) => (
+        {successRates.slice(0, 3).map((item) => (
           <SuccessRateItem key={item.color} item={item} />
         ))}
       </div>
