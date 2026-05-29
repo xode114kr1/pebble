@@ -48,7 +48,7 @@ export default function CalendarItem({
 
       {visits.length > 0 && (
         <div className="mt-1 flex max-w-full justify-center -space-x-1">
-          {visits.slice(0, 3).map((visit) => (
+          {visits.slice(0).map((visit) => (
             <Image
               key={visit.id}
               src={visit.gymLogoUrl}
@@ -60,12 +60,6 @@ export default function CalendarItem({
               unoptimized
             />
           ))}
-
-          {visits.length > 3 && (
-            <span className="label-sm flex h-5 w-5 items-center justify-center rounded-full bg-inverse-surface text-[10px] text-inverse-on-surface">
-              +{visits.length - 3}
-            </span>
-          )}
         </div>
       )}
     </button>
