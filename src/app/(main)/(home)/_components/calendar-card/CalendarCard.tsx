@@ -8,7 +8,7 @@ import { formatDateKey, getCalendarDays } from "@/utils/date";
 
 const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-export default function SmallCalendar() {
+export default function CalendarCard() {
   const today = useMemo(() => new Date(), []);
   const [currentDate, setCurrentDate] = useState(today);
   const [selectedDate, setSelectedDate] = useState(today);

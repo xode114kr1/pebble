@@ -1,6 +1,6 @@
 import CommunityCard from "./_components/community-card/CommunityCard";
 import RecentSuccessRate from "./_components/recent-success-rate/RecentSuccessRate";
-import SmallCalendar from "./_components/small-calendar/SmallCalendar";
+import CalendarCard from "./_components/calendar-card/CalendarCard";
 import SummaryCard from "./_components/summary-card/SummaryCard";
 
 export default function Home() {
@@ -9,7 +9,7 @@ export default function Home() {
       <div className="grid grid-cols-1 gap-lg md:grid-cols-12">
         <SummaryCard />
         <RecentSuccessRate />
-        <SmallCalendar />
+        <CalendarCard />
         <CommunityCard />
       </div>
     </div>
