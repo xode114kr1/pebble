@@ -19,6 +19,7 @@ export default function CalendarItem({
   visits,
   onSelectDate,
 }: CalendarItemProps) {
+  const firstVisit = visits[0];
   const isToday = isSameDate(date, today);
   const isSelected = isSameDate(date, selectedDate);
 
@@ -46,20 +47,17 @@ export default function CalendarItem({
         {date.getDate()}
       </span>
 
-      {visits.length > 0 && (
+      {firstVisit && (
         <div className="mt-1 flex max-w-full justify-center -space-x-1">
-          {visits.slice(0).map((visit) => (
-            <Image
-              key={visit.id}
-              src={visit.gymLogoUrl}
-              alt={visit.gymName}
-              title={visit.gymName}
-              width={20}
-              height={20}
-              className="h-5 w-5 rounded-full border border-white object-cover"
-              unoptimized
-            />
-          ))}
+          <Image
+            src={firstVisit.gymLogoUrl}
+            alt={firstVisit.gymName}
+            title={firstVisit.gymName}
+            width={20}
+            height={20}
+            className="h-5 w-5 rounded-full border border-white object-cover"
+            unoptimized
+          />
         </div>
       )}
     </button>
