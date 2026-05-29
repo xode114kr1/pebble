@@ -1,3 +1,4 @@
+import RecentSuccessRate from "./_components/recent-success-rate/RecentSuccessRate";
 import SummaryCard from "./_components/summary-card/SummaryCard";
 
 export default function Home() {
@@ -5,6 +6,7 @@ export default function Home() {
     <div className=" px-gutter py-lg">
       <div className="grid grid-cols-1 gap-lg md:grid-cols-12">
         <SummaryCard />
+        <RecentSuccessRate />
       </div>
     </div>
   );
