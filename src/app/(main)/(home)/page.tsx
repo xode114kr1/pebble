@@ -1,4 +1,4 @@
-import CommunityCard from "./_components/community-card/SmallCommunity";
+import CommunityCard from "./_components/community-card/CommunityCard";
 import RecentSuccessRate from "./_components/recent-success-rate/RecentSuccessRate";
 import SmallCalendar from "./_components/small-calendar/SmallCalendar";
 import SummaryCard from "./_components/summary-card/SummaryCard";
