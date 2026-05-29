@@ -28,7 +28,7 @@ function SummaryItem({ item }: SummaryItemProps) {
 
 export default function SummaryCard() {
   return (
-    <section className="card-interactive relative overflow-hidden md:col-span-8">
+    <section className="card-interactive relative overflow-hidden lg:col-span-8">
       <div className="absolute left-0 top-0 h-1 w-full bg-primary" />
       <div className="mb-xl flex items-start">
         <h2 className="text-headline-md text-on-surface">내 정보</h2>

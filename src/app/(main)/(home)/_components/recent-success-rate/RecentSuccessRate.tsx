@@ -55,7 +55,7 @@ function SuccessRateItem({ item }: SuccessRateItemProps) {
 
 export default function RecentSuccessRate() {
   return (
-    <section className="card md:col-span-4">
+    <section className="card lg:col-span-4">
       <h2 className="text-headline-md mb-lg text-on-surface">Recent</h2>
       <div className="space-y-4">
         {successRates.slice(0, 4).map((item) => (

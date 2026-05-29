@@ -42,7 +42,7 @@ export default function CalendarCard() {
   };
 
   return (
-    <section className="card md:col-span-8">
+    <section className="card lg:col-span-8">
       <div className="mb-lg flex items-center justify-between">
         <div>
           <h2 className="headline-md text-on-surface">

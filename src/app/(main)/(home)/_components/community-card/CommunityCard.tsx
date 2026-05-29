@@ -3,7 +3,7 @@ import { communityPosts } from "./community-dummy";
 
 export default function CommunityCard() {
   return (
-    <section className="card grow md:col-span-4">
+    <section className="card grow lg:col-span-4">
       <div className="mb-lg flex items-center justify-between">
         <div>
           <h2 className="headline-md text-on-surface">Community</h2>
