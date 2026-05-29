@@ -37,9 +37,9 @@ export default function CalendarItem({
     >
       <span
         className={[
-          "label-sm flex h-6 w-6 items-center justify-center rounded-full",
+          "text-title-lg absolute inset-0 z-0 flex items-center justify-center font-bold",
           isToday && !isSelected
-            ? "bg-surface-container-highest text-primary font-bold"
+            ? "text-primary"
             : "",
           isSelected ? "text-white" : "",
         ].join(" ")}
@@ -48,14 +48,14 @@ export default function CalendarItem({
       </span>
 
       {firstVisit && (
-        <div className="mt-1 flex max-w-full justify-center -space-x-1">
+        <div className="absolute inset-0 z-10 flex items-center justify-center">
           <Image
             src={firstVisit.gymLogoUrl}
             alt={firstVisit.gymName}
             title={firstVisit.gymName}
-            width={20}
-            height={20}
-            className="h-5 w-5 rounded-full border border-white object-cover"
+            width={40}
+            height={40}
+            className="h-10 w-10 rounded-full border border-white object-cover"
             unoptimized
           />
         </div>
