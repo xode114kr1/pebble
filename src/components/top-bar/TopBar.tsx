@@ -1,6 +1,7 @@
 "use client";
 
 import { signIn, signOut, useSession } from "next-auth/react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 export default function TopBar() {
@@ -25,13 +26,12 @@ export default function TopBar() {
           로그아웃
         </button>
       ) : (
-        <button
-          type="button"
-          onClick={() => signIn(undefined, { callbackUrl: "/login" })}
+        <Link
+          href="/login"
           className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-on-primary"
         >
           로그인
-        </button>
+        </Link>
       )}
     </header>
   );
