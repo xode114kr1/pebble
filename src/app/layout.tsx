@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import AuthProvider from "@/components/auth-provider/AuthProvider";
 
 export const metadata: Metadata = {
   title: "Pebble",
@@ -13,7 +14,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="text-body-md bg-page text-on-surface">{children}</body>
+      <body className="text-body-md bg-page text-on-surface">
+        <AuthProvider>{children}</AuthProvider>
+      </body>
     </html>
   );
 }
