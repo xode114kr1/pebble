@@ -11,22 +11,22 @@ export default function AdminGymList({
       <table className="w-full border-collapse text-left">
         <thead className="border-b border-outline-variant bg-surface-container-low">
           <tr>
-            <th className="label-sm px-lg py-md uppercase text-on-surface-variant">
+            <th className="label-sm px-sm py-md uppercase text-on-surface-variant sm:px-lg">
               브랜드명
             </th>
-            <th className="label-sm px-lg py-md uppercase text-on-surface-variant">
+            <th className="label-sm px-sm py-md uppercase text-on-surface-variant sm:px-lg">
               지점명
             </th>
-            <th className="label-sm px-lg py-md uppercase text-on-surface-variant">
+            <th className="label-sm hidden px-lg py-md uppercase text-on-surface-variant lg:table-cell">
               위치
             </th>
-            <th className="label-sm px-lg py-md uppercase text-on-surface-variant">
+            <th className="label-sm hidden px-lg py-md uppercase text-on-surface-variant lg:table-cell">
               난이도 색상 목록
             </th>
-            <th className="label-sm px-lg py-md uppercase text-on-surface-variant">
+            <th className="label-sm px-sm py-md uppercase text-on-surface-variant sm:px-lg">
               등록일
             </th>
-            <th className="label-sm px-lg py-md text-right uppercase text-on-surface-variant">
+            <th className="label-sm px-sm py-md text-right uppercase text-on-surface-variant sm:px-lg">
               관리
             </th>
           </tr>
@@ -39,12 +39,12 @@ export default function AdminGymList({
         </tbody>
       </table>
 
-      <div className="flex items-center justify-between border-t border-outline-variant bg-surface-container-lowest px-lg py-md">
+      <div className="flex flex-col gap-md border-t border-outline-variant bg-surface-container-lowest px-lg py-md sm:flex-row sm:items-center sm:justify-between">
         <p className="label-sm text-on-surface-variant">
           Showing 1 to {gymlist.length} of {gymlist.length} entries
         </p>
 
-        <div className="flex gap-sm">
+        <div className="flex justify-end gap-sm">
           <button
             type="button"
             disabled

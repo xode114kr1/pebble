@@ -9,19 +9,19 @@ export default function AdminGymItem({
 }) {
   return (
     <tr className="group transition-colors hover:bg-surface-bright">
-      <td className="px-lg py-md font-headline font-semibold text-on-surface">
+      <td className="whitespace-nowrap px-sm py-md font-headline font-semibold text-on-surface sm:px-lg">
         {branch.brand.name}
       </td>
 
-      <td className="body-md px-lg py-md text-on-surface-variant">
+      <td className="body-md whitespace-nowrap px-sm py-md text-on-surface-variant sm:px-lg">
         {branch.branchName}
       </td>
 
-      <td className="body-sm px-lg py-md text-on-surface-variant">
+      <td className="body-sm hidden whitespace-nowrap px-lg py-md text-on-surface-variant lg:table-cell">
         {branch.location}
       </td>
 
-      <td className="px-lg py-md">
+      <td className="hidden px-lg py-md lg:table-cell">
         <div className="flex gap-1">
           {branch.brand.gradeColors.map((color) => (
             <GradeColorDot key={color.id} color={color} />
@@ -29,12 +29,12 @@ export default function AdminGymItem({
         </div>
       </td>
 
-      <td className="label-md px-lg py-md text-on-surface-variant">
+      <td className="label-md px-sm py-md text-on-surface-variant sm:px-lg">
         {branch.createdAt}
       </td>
 
-      <td className="px-lg py-md text-right">
-        <div className="flex justify-end gap-sm opacity-0 transition-opacity group-hover:opacity-100">
+      <td className="px-sm py-md text-right sm:px-lg">
+        <div className="flex justify-end gap-xs opacity-100 transition-opacity lg:gap-sm lg:opacity-0 lg:group-hover:opacity-100">
           <button
             type="button"
             className="rounded-lg p-sm text-on-surface-variant transition-all hover:bg-surface-container-high hover:text-primary"
