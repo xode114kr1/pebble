@@ -9,6 +9,7 @@ import {
   ShieldCheck,
   Users,
 } from "lucide-react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -17,7 +18,12 @@ const navItems = [
   { icon: Map, label: "Gym", href: "/gym" },
   { icon: CirclePlus, label: "Record", href: "/record" },
   { icon: Users, label: "Community", href: "/community" },
-  { icon: ShieldCheck, label: "Admin", href: "/admin" },
+  {
+    icon: ShieldCheck,
+    label: "Admin",
+    href: "/admin",
+    adminOnly: true,
+  },
 ];
 
 type NavItemProps = {
@@ -49,6 +55,16 @@ function NavItem({ item, isActive }: NavItemProps) {
 export default function SideNav() {
   const pathname = usePathname();
 
+  const { data: session } = useSession();
+
+  const visibleNavItems = navItems.filter((item) => {
+    if (item.adminOnly) {
+      return session?.user.role === "ADMIN";
+    }
+
+    return true;
+  });
+
   return (
     <aside className="hidden md:flex flex-col h-screen w-64 bg-surface-container-lowest border-r border-outline-variant p-md space-y-md shrink-0">
       <div className="flex items-center gap-3 px-sm mb-xl">
@@ -60,7 +76,7 @@ export default function SideNav() {
         </div>
       </div>
       <nav className="grow space-y-1">
-        {navItems.map((item) => (
+        {visibleNavItems.map((item) => (
           <NavItem
             key={item.label}
             item={item}
