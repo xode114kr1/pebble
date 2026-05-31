@@ -17,7 +17,7 @@ export default function AdminGymsPage() {
     })
     .filter((branch) => branch !== null);
   return (
-    <div className="space-y-xl">
+    <div className="space-y-xl px-gutter py-lg">
       <AdminGymList gymlist={gymlist} />
     </div>
   );

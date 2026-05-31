@@ -1,8 +1,4 @@
-export type GradeColor = {
-  id: string;
-  name: string;
-  color: string;
-};
+import { GradeColor } from "@/types/gym";
 
 export type GymBrand = {
   id: string;
