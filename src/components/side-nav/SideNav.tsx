@@ -6,6 +6,7 @@ import {
   LucideIcon,
   Map,
   Mountain,
+  ShieldCheck,
   Users,
 } from "lucide-react";
 import Link from "next/link";
@@ -16,6 +17,7 @@ const navItems = [
   { icon: Map, label: "Gym", href: "/gym" },
   { icon: CirclePlus, label: "Record", href: "/record" },
   { icon: Users, label: "Community", href: "/community" },
+  { icon: ShieldCheck, label: "Admin", href: "/admin" },
 ];
 
 type NavItemProps = {
