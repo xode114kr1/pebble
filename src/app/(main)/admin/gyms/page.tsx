@@ -1,3 +1,4 @@
+import AdminGymHeader from "./_components/admin-gym-header/AdminGymHeader";
 import AdminGymList from "./_components/admin-gym-list/AdminGymList";
 import { dummyGymBranches, dummyGymBrands } from "./dummy-data";
 
@@ -18,6 +19,7 @@ export default function AdminGymsPage() {
     .filter((branch) => branch !== null);
   return (
     <div className="space-y-xl px-gutter py-lg">
+      <AdminGymHeader />
       <AdminGymList gymlist={gymlist} />
     </div>
   );
