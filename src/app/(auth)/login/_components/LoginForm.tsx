@@ -1,6 +1,57 @@
+"use client";
+import { signIn } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { FormEvent, useState } from "react";
 
 export default function LoginForm() {
+  const router = useRouter();
+
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    setErrorMessage("");
+
+    const formData = new FormData(event.currentTarget);
+
+    const email = String(formData.get("email"));
+    const password = String(formData.get("password"));
+
+    if (!email || !password) {
+      setErrorMessage("모든 항목을 입력해주세요");
+      return;
+    }
+
+    if (password.length < 8) {
+      setErrorMessage("비밀번호는 8자 이상 입력해주세요.");
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+
+      const res = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
+
+      if (res?.error) {
+        setErrorMessage("이메일 또는 비밀번호가 올바르지 않습니다.");
+        return;
+      }
+      router.push("/");
+      router.refresh();
+    } catch (error) {
+      console.error(error);
+      setErrorMessage("로그인 중 오류가 발생했습니다.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
   return (
     <div className="card">
       <div className="mb-xl space-y-xs text-center">
@@ -10,7 +61,7 @@ export default function LoginForm() {
         </p>
       </div>
 
-      <form className="space-y-md">
+      <form className="space-y-md" onSubmit={handleSubmit}>
         <label className="block space-y-xs">
           <span className="label-md text-on-surface">이메일</span>
           <input
@@ -42,14 +93,11 @@ export default function LoginForm() {
             />
             로그인 유지
           </label>
-
-          <button className="label-md text-primary" type="button">
-            비밀번호 찾기
-          </button>
         </div>
+        {errorMessage && <p className="body-sm text-error">{errorMessage}</p>}
 
-        <button className="btn-primary mt-sm w-full" type="button">
-          로그인
+        <button className="btn-primary mt-sm w-full" type="submit">
+          {isSubmitting ? "로그인 중..." : "로그인"}
         </button>
       </form>
 
