@@ -1,6 +1,13 @@
 "use client";
 
-import { Building2, Palette, Plus, X } from "lucide-react";
+import {
+  Building2,
+  ChevronDown,
+  ChevronUp,
+  Palette,
+  Plus,
+  X,
+} from "lucide-react";
 
 type GradeColor = {
   id: string;
@@ -103,10 +110,6 @@ function GradeColorSection() {
           <Palette size={18} className="text-primary" />
           <label htmlFor="grade-color-name">Grade Color</label>
         </div>
-
-        <span className="shrink-0 rounded-full bg-primary-container/20 px-2 py-0.5 font-label text-label-sm text-primary">
-          {previewGradeColors.length}개
-        </span>
       </div>
 
       <div className="flex flex-col gap-3 sm:flex-row">
@@ -128,34 +131,74 @@ function GradeColorSection() {
         </button>
       </div>
 
-      <div className="flex min-h-20 flex-wrap gap-2.5 rounded-xl border border-outline-variant/50 bg-surface-container p-4">
-        {previewGradeColors.map((gradeColor) => (
-          <GradeColorChip key={gradeColor.id} gradeColor={gradeColor} />
+      <div className="space-y-2 rounded-xl border border-outline-variant/50 bg-surface-container p-4">
+        {previewGradeColors.map((gradeColor, index) => (
+          <GradeColorItem
+            key={gradeColor.id}
+            gradeColor={gradeColor}
+            index={index}
+            isFirst={index === 0}
+            isLast={index === previewGradeColors.length - 1}
+          />
         ))}
       </div>
     </section>
   );
 }
 
-function GradeColorChip({ gradeColor }: { gradeColor: GradeColor }) {
+function GradeColorItem({
+  gradeColor,
+  index,
+  isFirst,
+  isLast,
+}: {
+  gradeColor: GradeColor;
+  index: number;
+  isFirst: boolean;
+  isLast: boolean;
+}) {
   return (
-    <div className="group flex items-center gap-2 rounded-full border border-outline-variant bg-background py-1 pl-1 pr-2 shadow-sm">
+    <div className="flex items-center gap-3 rounded-xl border border-outline-variant bg-background px-3 py-2 shadow-sm">
+      <span className="w-6 text-center font-label text-label-sm text-on-surface-variant">
+        {index + 1}
+      </span>
+
       <div
         className="h-5 w-5 rounded-full border border-outline-variant"
         style={{ backgroundColor: gradeColor.color }}
       />
 
-      <span className="font-label text-label-md text-on-surface">
+      <span className="flex-1 font-label text-label-md text-on-surface">
         {gradeColor.name}
       </span>
 
-      <button
-        type="button"
-        className="ml-1 text-on-surface-variant transition-colors hover:text-error"
-        aria-label={`${gradeColor.name} 삭제`}
-      >
-        <X size={14} />
-      </button>
+      <div className="flex items-center gap-1">
+        <button
+          type="button"
+          disabled={isFirst}
+          className="flex h-8 w-8 items-center justify-center rounded-full text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-on-surface disabled:cursor-not-allowed disabled:opacity-30"
+          aria-label={`${gradeColor.name} 위로 이동`}
+        >
+          <ChevronUp size={16} />
+        </button>
+
+        <button
+          type="button"
+          disabled={isLast}
+          className="flex h-8 w-8 items-center justify-center rounded-full text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-on-surface disabled:cursor-not-allowed disabled:opacity-30"
+          aria-label={`${gradeColor.name} 아래로 이동`}
+        >
+          <ChevronDown size={16} />
+        </button>
+
+        <button
+          type="button"
+          className="flex h-8 w-8 items-center justify-center rounded-full text-on-surface-variant transition-colors hover:bg-error-container hover:text-error"
+          aria-label={`${gradeColor.name} 삭제`}
+        >
+          <X size={15} />
+        </button>
+      </div>
     </div>
   );
 }
