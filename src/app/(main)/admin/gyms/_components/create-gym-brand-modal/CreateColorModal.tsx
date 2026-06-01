@@ -2,6 +2,7 @@
 
 import { X } from "lucide-react";
 import { useState } from "react";
+import { createDifficultyColor } from "./api";
 
 type CreateColorModalProps = {
   isOpen: boolean;
@@ -12,7 +13,47 @@ export default function CreateColorModal({
   isOpen,
   onClose,
 }: CreateColorModalProps) {
-  const [colorCode, setColorCode] = useState("#4d5180");
+  const [name, setName] = useState("");
+  const [colorCode, setColorCode] = useState("#EF4444");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const handleClose = () => {
+    setName("");
+    setColorCode("#EF4444");
+    setErrorMessage("");
+    onClose();
+  };
+
+  const handleSubmit = async () => {
+    const trimmedName = name.trim();
+    const normalizedColorCode = colorCode.trim().toUpperCase();
+
+    if (!trimmedName || !normalizedColorCode) {
+      setErrorMessage("색상 이름과 색상 코드를 입력해주세요.");
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+      setErrorMessage("");
+
+      await createDifficultyColor({
+        name: trimmedName,
+        colorCode: normalizedColorCode,
+      });
+
+      handleClose();
+    } catch (error) {
+      setErrorMessage(
+        error instanceof Error
+          ? error.message
+          : "색상 추가 중 오류가 발생했습니다.",
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   if (!isOpen) {
     return null;
@@ -29,7 +70,7 @@ export default function CreateColorModal({
 
             <button
               type="button"
-              onClick={onClose}
+              onClick={handleClose}
               className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-on-surface"
               aria-label="색상 등록 모달 닫기"
             >
@@ -50,7 +91,9 @@ export default function CreateColorModal({
             <input
               id="new-grade-color-name"
               type="text"
-              placeholder="예: Mint, V3, 노랑"
+              value={name}
+              placeholder="Red"
+              onChange={(event) => setName(event.target.value)}
               className="w-full rounded-lg border border-outline-variant bg-background px-4 py-3 font-label text-body-md text-on-surface outline-none transition-all placeholder:text-on-surface-variant focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </section>
@@ -81,12 +124,16 @@ export default function CreateColorModal({
               />
             </div>
           </section>
+
+          {errorMessage && (
+            <p className="text-body-sm text-error">{errorMessage}</p>
+          )}
         </div>
 
         <div className="flex justify-end gap-3 border-t border-outline-variant bg-surface-container-low px-6 py-5">
           <button
             type="button"
-            onClick={onClose}
+            onClick={handleClose}
             className="rounded-lg px-5 py-2.5 font-label text-label-md font-medium text-on-surface-variant transition-colors hover:bg-surface-container-high"
           >
             취소
@@ -94,13 +141,14 @@ export default function CreateColorModal({
 
           <button
             type="button"
-            className="rounded-lg bg-primary px-6 py-2.5 font-label text-label-md font-medium text-on-primary shadow-md shadow-primary/20 transition-all hover:opacity-90"
+            onClick={handleSubmit}
+            disabled={isSubmitting}
+            className="rounded-lg bg-primary px-6 py-2.5 font-label text-label-md font-medium text-on-primary shadow-md shadow-primary/20 transition-all hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            저장
+            {isSubmitting ? "저장 중" : "저장"}
           </button>
         </div>
       </div>
     </div>
   );
 }
-
