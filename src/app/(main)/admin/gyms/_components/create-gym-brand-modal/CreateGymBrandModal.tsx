@@ -1,7 +1,6 @@
+import { X } from "lucide-react";
 import BrandNameSection from "./BrandNameSection";
 import GradeColorSection from "./GradeColorSection";
-import ModalFooter from "./ModalFooter";
-import ModalHeader from "./ModalHeader";
 
 type CreateGymBrandModalProps = {
   isOpen: boolean;
@@ -28,6 +27,50 @@ export default function CreateGymBrandModal({
 
         <ModalFooter onClose={onClose} />
       </div>
+    </div>
+  );
+}
+
+function ModalHeader({ onClose }: { onClose: () => void }) {
+  return (
+    <div className="border-b border-outline-variant px-6 py-5 sm:px-8 sm:py-6">
+      <div className="flex items-center justify-between gap-4">
+        <div>
+          <h2 className="font-headline text-headline-md text-on-surface">
+            암장 브랜드 등록
+          </h2>
+        </div>
+
+        <button
+          type="button"
+          onClick={onClose}
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-on-surface"
+          aria-label="모달 닫기"
+        >
+          <X size={22} />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function ModalFooter({ onClose }: { onClose: () => void }) {
+  return (
+    <div className="flex justify-end gap-3 border-t border-outline-variant bg-surface-container-low px-6 py-5 sm:px-8 sm:py-6">
+      <button
+        type="button"
+        onClick={onClose}
+        className="rounded-lg px-6 py-2.5 font-label text-label-md font-medium text-on-surface-variant transition-colors hover:bg-surface-container-high"
+      >
+        취소
+      </button>
+
+      <button
+        type="button"
+        className="rounded-lg bg-primary px-8 py-2.5 font-label text-label-md font-medium text-on-primary shadow-md shadow-primary/20 transition-all hover:opacity-90"
+      >
+        등록하기
+      </button>
     </div>
   );
 }
