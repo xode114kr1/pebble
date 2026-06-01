@@ -26,9 +26,6 @@ export default function AdminGymList({
             <th className="label-sm px-sm py-md uppercase text-on-surface-variant sm:px-lg">
               등록일
             </th>
-            <th className="label-sm px-sm py-md text-right uppercase text-on-surface-variant sm:px-lg">
-              관리
-            </th>
           </tr>
         </thead>
 
