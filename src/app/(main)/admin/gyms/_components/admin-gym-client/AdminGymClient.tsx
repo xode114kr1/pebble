@@ -12,13 +12,16 @@ export default function AdminGymClient({
 }: {
   gymlist: GymBranchWithBrand[];
 }) {
-  const [brandModal, setBrandModal] = useState("false");
-  const [gymModal, setGymModal] = useState("false");
+  const [isBrandModalOpen, setIsBrandModalOpen] = useState(true);
+
   return (
     <>
       <AdminGymHeader />
       <AdminGymList gymlist={gymlist} />
-      <CreateGymBrandModal />
+      <CreateGymBrandModal
+        isOpen={isBrandModalOpen}
+        onClose={() => setIsBrandModalOpen(false)}
+      />
       <GymDetailModal />
     </>
   );
