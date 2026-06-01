@@ -1,6 +1,14 @@
 import { Plus, Search } from "lucide-react";
 
-export default function AdminGymHeader() {
+type AdminGymHeaderProps = {
+  onCreateBrandClick: () => void;
+  onCreateGymClick: () => void;
+};
+
+export default function AdminGymHeader({
+  onCreateBrandClick,
+  onCreateGymClick,
+}: AdminGymHeaderProps) {
   return (
     <header className="mb-8 flex flex-col gap-4 rounded-2xl border border-outline-variant bg-surface-container-lowest p-6 shadow-sm lg:flex-row lg:items-center lg:justify-between">
       <div className="relative w-full lg:w-105">
@@ -18,6 +26,7 @@ export default function AdminGymHeader() {
       <div className="flex w-full gap-3 lg:w-auto">
         <button
           type="button"
+          onClick={onCreateBrandClick}
           className="flex-1 whitespace-nowrap rounded-lg border border-primary px-5 py-2.5 text-sm font-medium text-primary transition-colors hover:bg-surface-container-low lg:flex-none"
         >
           암장 브랜드 등록
@@ -25,6 +34,7 @@ export default function AdminGymHeader() {
 
         <button
           type="button"
+          onClick={onCreateGymClick}
           className="flex flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-on-primary transition-all hover:opacity-90 lg:flex-none"
         >
           <Plus size={16} className="shrink-0" />

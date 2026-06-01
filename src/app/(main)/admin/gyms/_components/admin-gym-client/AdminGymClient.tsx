@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { GymBranchWithBrand } from "../../types/adminGym";
+import { GymBranchWithBrand, GymBrand } from "../../types/adminGym";
 import AdminGymHeader from "../admin-gym-header/AdminGymHeader";
 import AdminGymList from "../admin-gym-list/AdminGymList";
 import CreateGymBrandModal from "../create-gym-brand-modal/CreateGymBrandModal";
@@ -12,17 +12,33 @@ export default function AdminGymClient({
 }: {
   gymlist: GymBranchWithBrand[];
 }) {
-  const [isBrandModalOpen, setIsBrandModalOpen] = useState(true);
+  const [isBrandModalOpen, setIsBrandModalOpen] = useState(false);
+  const [isGymModalOpen, setIsGymModalOpen] = useState(false);
+
+  const brands = gymlist.reduce<GymBrand[]>((acc, branch) => {
+    if (!acc.some((brand) => brand.id === branch.brand.id)) {
+      acc.push(branch.brand);
+    }
+
+    return acc;
+  }, []);
 
   return (
     <>
-      <AdminGymHeader />
+      <AdminGymHeader
+        onCreateBrandClick={() => setIsBrandModalOpen(true)}
+        onCreateGymClick={() => setIsGymModalOpen(true)}
+      />
       <AdminGymList gymlist={gymlist} />
       <CreateGymBrandModal
         isOpen={isBrandModalOpen}
         onClose={() => setIsBrandModalOpen(false)}
       />
-      <GymDetailModal />
+      <GymDetailModal
+        brands={brands}
+        isOpen={isGymModalOpen}
+        onClose={() => setIsGymModalOpen(false)}
+      />
     </>
   );
 }
