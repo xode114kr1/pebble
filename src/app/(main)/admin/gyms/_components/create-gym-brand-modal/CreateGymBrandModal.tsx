@@ -1,6 +1,6 @@
 "use client";
 
-import { Plus, X } from "lucide-react";
+import { Building2, Palette, Plus, X } from "lucide-react";
 
 type GradeColor = {
   id: string;
@@ -32,10 +32,10 @@ export default function CreateGymBrandModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-inverse-surface/60 px-4 py-6 backdrop-blur-sm">
-      <div className="flex flex-col overflow-hidden rounded-2xl border border-outline-variant bg-surface-container-lowest shadow-2xl">
+      <div className="flex max-h-[88vh] w-[min(calc(100vw-32px),560px)] flex-col overflow-hidden rounded-2xl border border-outline-variant bg-surface-container-lowest shadow-2xl">
         <ModalHeader onClose={onClose} />
 
-        <div className="space-y-8 overflow-y-auto px-6 py-6 sm:px-8">
+        <div className="space-y-6 overflow-y-auto px-6 py-6 sm:px-8">
           <BrandNameSection />
           <GradeColorSection />
         </div>
@@ -50,9 +50,11 @@ function ModalHeader({ onClose }: { onClose: () => void }) {
   return (
     <div className="border-b border-outline-variant px-6 py-5 sm:px-8 sm:py-6">
       <div className="flex items-center justify-between gap-4">
-        <h2 className="font-headline text-headline-md text-on-surface">
-          암장 브랜드 등록
-        </h2>
+        <div>
+          <h2 className="font-headline text-headline-md text-on-surface">
+            암장 브랜드 등록
+          </h2>
+        </div>
 
         <button
           type="button"
@@ -77,12 +79,18 @@ function BrandNameSection() {
         브랜드 이름
       </label>
 
-      <input
-        id="gym-brand-name"
-        type="text"
-        placeholder="예: 더클라임"
-        className="w-full rounded-lg border border-outline-variant bg-background px-4 py-3 font-label text-body-md text-on-surface outline-none transition-all placeholder:text-on-surface-variant focus:border-primary focus:ring-2 focus:ring-primary/20"
-      />
+      <div className="relative">
+        <span className="absolute left-4 top-1/2 flex -translate-y-1/2 text-outline">
+          <Building2 size={18} />
+        </span>
+
+        <input
+          id="gym-brand-name"
+          type="text"
+          placeholder="예: 더클라임"
+          className="w-full rounded-lg border border-outline-variant bg-background py-3 pl-11 pr-4 font-label text-body-md text-on-surface outline-none transition-all placeholder:text-on-surface-variant focus:border-primary focus:ring-2 focus:ring-primary/20"
+        />
+      </div>
     </section>
   );
 }
@@ -91,15 +99,13 @@ function GradeColorSection() {
   return (
     <section className="space-y-4">
       <div className="flex items-center justify-between gap-3">
-        <label
-          htmlFor="grade-color-name"
-          className="block font-label text-label-md text-on-surface-variant"
-        >
-          난이도 등급 색상 등록
-        </label>
+        <div className="flex items-center gap-2 font-label text-label-md text-on-surface-variant">
+          <Palette size={18} className="text-primary" />
+          <label htmlFor="grade-color-name">Grade Color</label>
+        </div>
 
         <span className="shrink-0 rounded-full bg-primary-container/20 px-2 py-0.5 font-label text-label-sm text-primary">
-          {previewGradeColors.length}개 등록됨
+          {previewGradeColors.length}개
         </span>
       </div>
 
@@ -122,7 +128,7 @@ function GradeColorSection() {
         </button>
       </div>
 
-      <div className="flex flex-wrap gap-2.5 rounded-xl border border-outline-variant/50 bg-surface-container p-4">
+      <div className="flex min-h-20 flex-wrap gap-2.5 rounded-xl border border-outline-variant/50 bg-surface-container p-4">
         {previewGradeColors.map((gradeColor) => (
           <GradeColorChip key={gradeColor.id} gradeColor={gradeColor} />
         ))}
