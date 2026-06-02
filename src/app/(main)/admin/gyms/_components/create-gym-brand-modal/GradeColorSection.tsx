@@ -1,8 +1,9 @@
 "use client";
 
 import { Palette, Plus, Search } from "lucide-react";
-import { useState } from "react";
-import { previewGradeColors, savedGradeColors } from "./constants";
+import { useEffect, useState } from "react";
+import { getDifficultyColors } from "./api";
+import { previewGradeColors } from "./constants";
 import CreateColorModal from "./CreateColorModal";
 import GradeColorItem from "./GradeColorItem";
 import GradeColorSearchDropdown from "./GradeColorSearchDropdown";
@@ -22,10 +23,59 @@ export default function GradeColorSection() {
     const hasKeyword = Boolean(keyword.trim());
 
     setSearchKeyword(keyword);
-    setSearchResults(hasKeyword ? savedGradeColors : []);
     setIsDropdownOpen(hasKeyword);
-    setIsSearching(false);
+
+    if (!hasKeyword) {
+      setSearchResults([]);
+      setIsSearching(false);
+    }
   };
+
+  useEffect(() => {
+    const keyword = searchKeyword.trim();
+
+    if (!keyword) {
+      return;
+    }
+
+    let isCanceled = false;
+
+    const fetchDifficultyColors = async () => {
+      setIsSearching(true);
+
+      try {
+        const difficultyColors = await getDifficultyColors(keyword);
+
+        if (isCanceled) {
+          return;
+        }
+
+        setSearchResults(
+          difficultyColors.map((color) => ({
+            id: String(color.id),
+            name: color.name,
+            color: color.colorCode,
+          })),
+        );
+        setIsDropdownOpen(true);
+      } catch {
+        if (!isCanceled) {
+          setSearchResults([]);
+          setIsDropdownOpen(false);
+        }
+      } finally {
+        if (!isCanceled) {
+          setIsSearching(false);
+        }
+      }
+    };
+
+    fetchDifficultyColors();
+
+    return () => {
+      isCanceled = true;
+    };
+  }, [searchKeyword]);
 
   return (
     <section className="space-y-4">
@@ -85,4 +135,3 @@ export default function GradeColorSection() {
     </section>
   );
 }
-
