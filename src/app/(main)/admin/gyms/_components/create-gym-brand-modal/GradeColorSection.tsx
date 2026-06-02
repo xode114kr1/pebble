@@ -110,8 +110,12 @@ export default function GradeColorSection() {
             className="w-full rounded-lg border border-outline-variant bg-background py-3 pl-11 pr-4 font-label text-body-md text-on-surface outline-none transition-all placeholder:text-on-surface-variant focus:border-primary focus:ring-2 focus:ring-primary/20"
           />
 
-          {isDropdownOpen && !isSearching && (
-            <GradeColorSearchDropdown colors={searchResults} />
+          {isDropdownOpen && (
+            <GradeColorSearchDropdown
+              colors={searchResults}
+              isLoading={isSearching}
+              keyword={searchKeyword}
+            />
           )}
         </div>
       </div>
