@@ -46,6 +46,7 @@ export default function GradeColorSection() {
     });
     setSearchKeyword("");
     setSearchResults([]);
+    setIsSearching(false);
     setIsDropdownOpen(false);
   };
 
