@@ -8,14 +8,19 @@ import CreateBrandModal from "../create-brand-modal/CreateBrandModal";
 
 export default function AdminBrandClient({
   brands,
+  query,
 }: {
   brands: AdminBrand[];
+  query: string;
 }) {
   const [isBrandModalOpen, setIsBrandModalOpen] = useState(false);
 
   return (
     <>
-      <AdminBrandHeader onCreateBrandClick={() => setIsBrandModalOpen(true)} />
+      <AdminBrandHeader
+        query={query}
+        onCreateBrandClick={() => setIsBrandModalOpen(true)}
+      />
       <AdminBrandList brands={brands} />
       <CreateBrandModal
         isOpen={isBrandModalOpen}

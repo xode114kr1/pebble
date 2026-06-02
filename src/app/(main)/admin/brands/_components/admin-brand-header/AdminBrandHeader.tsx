@@ -1,26 +1,30 @@
 import { Plus, Search } from "lucide-react";
 
 type AdminBrandHeaderProps = {
+  query: string;
   onCreateBrandClick: () => void;
 };
 
 export default function AdminBrandHeader({
+  query,
   onCreateBrandClick,
 }: AdminBrandHeaderProps) {
   return (
     <header className="mb-8 flex flex-col gap-4 rounded-2xl border border-outline-variant bg-surface-container-lowest p-6 shadow-sm lg:flex-row lg:items-center lg:justify-between">
-      <div className="relative w-full lg:w-105">
+      <form action="/admin/brands" className="relative w-full lg:w-105">
         <Search
           size={20}
           className="absolute left-4 top-1/2 -translate-y-1/2 text-outline"
         />
 
         <input
+          name="query"
           type="text"
+          defaultValue={query}
           placeholder="브랜드명으로 검색"
           className="w-full rounded-xl border border-outline-variant bg-background py-3 pl-12 pr-4 text-sm font-medium text-on-surface outline-none transition-all placeholder:text-on-surface-variant focus:border-primary focus:ring-2 focus:ring-primary"
         />
-      </div>
+      </form>
 
       <button
         type="button"

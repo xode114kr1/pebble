@@ -2,8 +2,28 @@ import { prisma } from "@/lib/prisma";
 import { formatDateKey } from "@/utils/date";
 import AdminBrandClient from "./_components/admin-brand-client/AdminBrandClient";
 
-export default async function AdminBrandsPage() {
+type AdminBrandsPageProps = {
+  searchParams: Promise<{
+    query?: string | string[];
+  }>;
+};
+
+export default async function AdminBrandsPage({
+  searchParams,
+}: AdminBrandsPageProps) {
+  const { query: queryParam } = await searchParams;
+  const query = Array.isArray(queryParam) ? queryParam[0] : queryParam;
+  const trimmedQuery = query?.trim();
+
   const brands = await prisma.brand.findMany({
+    where: trimmedQuery
+      ? {
+          name: {
+            contains: trimmedQuery,
+            mode: "insensitive",
+          },
+        }
+      : undefined,
     orderBy: {
       createdAt: "desc",
     },
@@ -39,7 +59,7 @@ export default async function AdminBrandsPage() {
 
   return (
     <div className="space-y-xl px-gutter py-lg">
-      <AdminBrandClient brands={brandItems} />
+      <AdminBrandClient brands={brandItems} query={trimmedQuery ?? ""} />
     </div>
   );
 }
