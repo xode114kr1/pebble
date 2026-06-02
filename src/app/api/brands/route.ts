@@ -1,6 +1,58 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
+export async function GET(request: Request) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const query = searchParams.get("query")?.trim();
+
+    const brands = await prisma.brand.findMany({
+      where: query
+        ? {
+            name: {
+              contains: query,
+              mode: "insensitive",
+            },
+          }
+        : undefined,
+      orderBy: {
+        createdAt: "desc",
+      },
+      select: {
+        id: true,
+        name: true,
+        createdAt: true,
+        updatedAt: true,
+        colors: {
+          orderBy: {
+            order: "asc",
+          },
+          select: {
+            id: true,
+            order: true,
+            difficultyColor: {
+              select: {
+                id: true,
+                name: true,
+                colorCode: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return NextResponse.json(brands);
+  } catch (error) {
+    console.error(error);
+
+    return NextResponse.json(
+      { message: "브랜드 목록 조회 중 오류가 발생했습니다." },
+      { status: 500 },
+    );
+  }
+}
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
