@@ -33,7 +33,17 @@ export default function GradeColorSection() {
   };
 
   const handleSelectSearchResult = (color: GradeColor) => {
-    setSelectedColors((prev) => [...prev, color]);
+    setSelectedColors((prev) => {
+      const isAlreadySelected = prev.some(
+        (selectedColor) => selectedColor.id === color.id,
+      );
+
+      if (isAlreadySelected) {
+        return prev;
+      }
+
+      return [...prev, color];
+    });
     setSearchKeyword("");
     setSearchResults([]);
     setIsDropdownOpen(false);
