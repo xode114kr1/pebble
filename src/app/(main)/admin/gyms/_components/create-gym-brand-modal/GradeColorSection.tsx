@@ -31,6 +31,13 @@ export default function GradeColorSection() {
     }
   };
 
+  const handleSelectSearchResult = (color: GradeColor) => {
+    console.log(color);
+    setSearchKeyword("");
+    setSearchResults([]);
+    setIsDropdownOpen(false);
+  };
+
   useEffect(() => {
     const keyword = searchKeyword.trim();
 
@@ -115,6 +122,7 @@ export default function GradeColorSection() {
               colors={searchResults}
               isLoading={isSearching}
               keyword={searchKeyword}
+              onSelect={handleSelectSearchResult}
             />
           )}
         </div>

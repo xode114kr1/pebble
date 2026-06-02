@@ -5,12 +5,14 @@ type GradeColorSearchDropdownProps = {
   colors: GradeColor[];
   isLoading: boolean;
   keyword: string;
+  onSelect: (color: GradeColor) => void;
 };
 
 export default function GradeColorSearchDropdown({
   colors,
   isLoading,
   keyword,
+  onSelect,
 }: GradeColorSearchDropdownProps) {
   return (
     <div className="absolute left-0 right-0 top-[calc(100%+8px)] z-10 overflow-hidden rounded-xl border border-outline-variant bg-surface-container-lowest shadow-2xl">
@@ -24,6 +26,7 @@ export default function GradeColorSearchDropdown({
             <button
               key={color.id}
               type="button"
+              onClick={() => onSelect(color)}
               className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-surface-container-low"
             >
               <span
