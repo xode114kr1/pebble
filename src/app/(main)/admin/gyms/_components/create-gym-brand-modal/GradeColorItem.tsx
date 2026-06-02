@@ -6,6 +6,9 @@ type GradeColorItemProps = {
   index: number;
   isFirst: boolean;
   isLast: boolean;
+  onMoveUp: () => void;
+  onMoveDown: () => void;
+  onRemove: () => void;
 };
 
 export default function GradeColorItem({
@@ -13,6 +16,9 @@ export default function GradeColorItem({
   index,
   isFirst,
   isLast,
+  onMoveUp,
+  onMoveDown,
+  onRemove,
 }: GradeColorItemProps) {
   return (
     <div className="flex items-center gap-3 rounded-xl border border-outline-variant bg-background px-3 py-2 shadow-sm">
@@ -33,6 +39,7 @@ export default function GradeColorItem({
         <button
           type="button"
           disabled={isFirst}
+          onClick={onMoveUp}
           className="flex h-8 w-8 items-center justify-center rounded-full text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-on-surface disabled:cursor-not-allowed disabled:opacity-30"
           aria-label={`${gradeColor.name} 위로 이동`}
         >
@@ -42,6 +49,7 @@ export default function GradeColorItem({
         <button
           type="button"
           disabled={isLast}
+          onClick={onMoveDown}
           className="flex h-8 w-8 items-center justify-center rounded-full text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-on-surface disabled:cursor-not-allowed disabled:opacity-30"
           aria-label={`${gradeColor.name} 아래로 이동`}
         >
@@ -50,6 +58,7 @@ export default function GradeColorItem({
 
         <button
           type="button"
+          onClick={onRemove}
           className="flex h-8 w-8 items-center justify-center rounded-full text-on-surface-variant transition-colors hover:bg-error-container hover:text-error"
           aria-label={`${gradeColor.name} 삭제`}
         >

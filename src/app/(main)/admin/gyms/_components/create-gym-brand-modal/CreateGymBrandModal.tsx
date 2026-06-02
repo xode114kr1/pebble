@@ -2,7 +2,11 @@
 
 import useOutSideClick from "@/hooks/useOutSideClick";
 import { Building2, X } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { createBrand } from "./api";
 import GradeColorSection from "./GradeColorSection";
+import { GradeColor } from "./types";
 
 type CreateGymBrandModalProps = {
   isOpen: boolean;
@@ -13,7 +17,55 @@ export default function CreateGymBrandModal({
   isOpen,
   onClose,
 }: CreateGymBrandModalProps) {
-  const modalRef = useOutSideClick<HTMLDivElement>(onClose, isOpen);
+  const router = useRouter();
+  const [brandName, setBrandName] = useState("");
+  const [selectedColors, setSelectedColors] = useState<GradeColor[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const handleClose = () => {
+    setBrandName("");
+    setSelectedColors([]);
+    setErrorMessage("");
+    onClose();
+  };
+
+  const modalRef = useOutSideClick<HTMLDivElement>(handleClose, isOpen);
+
+  const handleSubmit = async () => {
+    const trimmedName = brandName.trim();
+
+    if (!trimmedName) {
+      setErrorMessage("브랜드 이름을 입력해주세요.");
+      return;
+    }
+
+    if (selectedColors.length === 0) {
+      setErrorMessage("브랜드에 적용할 난이도 색상을 선택해주세요.");
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+      setErrorMessage("");
+
+      await createBrand({
+        name: trimmedName,
+        difficultyColorIds: selectedColors.map((color) => Number(color.id)),
+      });
+
+      router.refresh();
+      handleClose();
+    } catch (error) {
+      setErrorMessage(
+        error instanceof Error
+          ? error.message
+          : "브랜드 등록 중 오류가 발생했습니다.",
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   if (!isOpen) {
     return null;
@@ -25,14 +77,28 @@ export default function CreateGymBrandModal({
         ref={modalRef}
         className="flex max-h-[88vh] w-[min(calc(100vw-32px),560px)] flex-col overflow-hidden rounded-2xl border border-outline-variant bg-surface-container-lowest shadow-2xl"
       >
-        <ModalHeader onClose={onClose} />
+        <ModalHeader onClose={handleClose} />
 
         <div className="space-y-6 overflow-y-auto px-6 py-6 sm:px-8">
-          <BrandNameSection />
-          <GradeColorSection />
+          <BrandNameSection
+            brandName={brandName}
+            onBrandNameChange={setBrandName}
+          />
+          <GradeColorSection
+            selectedColors={selectedColors}
+            onSelectedColorsChange={setSelectedColors}
+          />
+
+          {errorMessage && (
+            <p className="text-body-sm text-error">{errorMessage}</p>
+          )}
         </div>
 
-        <ModalFooter onClose={onClose} />
+        <ModalFooter
+          isSubmitting={isSubmitting}
+          onClose={handleClose}
+          onSubmit={handleSubmit}
+        />
       </div>
     </div>
   );
@@ -61,7 +127,15 @@ function ModalHeader({ onClose }: { onClose: () => void }) {
   );
 }
 
-function BrandNameSection() {
+type BrandNameSectionProps = {
+  brandName: string;
+  onBrandNameChange: (brandName: string) => void;
+};
+
+function BrandNameSection({
+  brandName,
+  onBrandNameChange,
+}: BrandNameSectionProps) {
   return (
     <section className="space-y-3">
       <label
@@ -79,6 +153,8 @@ function BrandNameSection() {
         <input
           id="gym-brand-name"
           type="text"
+          value={brandName}
+          onChange={(event) => onBrandNameChange(event.target.value)}
           placeholder="예: 더클라임"
           className="w-full rounded-lg border border-outline-variant bg-background py-3 pl-11 pr-4 font-label text-body-md text-on-surface outline-none transition-all placeholder:text-on-surface-variant focus:border-primary focus:ring-2 focus:ring-primary/20"
         />
@@ -87,22 +163,31 @@ function BrandNameSection() {
   );
 }
 
-function ModalFooter({ onClose }: { onClose: () => void }) {
+type ModalFooterProps = {
+  isSubmitting: boolean;
+  onClose: () => void;
+  onSubmit: () => void;
+};
+
+function ModalFooter({ isSubmitting, onClose, onSubmit }: ModalFooterProps) {
   return (
     <div className="flex justify-end gap-3 border-t border-outline-variant bg-surface-container-low px-6 py-5 sm:px-8 sm:py-6">
       <button
         type="button"
         onClick={onClose}
-        className="rounded-lg px-6 py-2.5 font-label text-label-md font-medium text-on-surface-variant transition-colors hover:bg-surface-container-high"
+        disabled={isSubmitting}
+        className="rounded-lg px-6 py-2.5 font-label text-label-md font-medium text-on-surface-variant transition-colors hover:bg-surface-container-high disabled:cursor-not-allowed disabled:opacity-60"
       >
         취소
       </button>
 
       <button
         type="button"
-        className="rounded-lg bg-primary px-8 py-2.5 font-label text-label-md font-medium text-on-primary shadow-md shadow-primary/20 transition-all hover:opacity-90"
+        onClick={onSubmit}
+        disabled={isSubmitting}
+        className="rounded-lg bg-primary px-8 py-2.5 font-label text-label-md font-medium text-on-primary shadow-md shadow-primary/20 transition-all hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
       >
-        등록하기
+        {isSubmitting ? "등록 중" : "등록하기"}
       </button>
     </div>
   );
