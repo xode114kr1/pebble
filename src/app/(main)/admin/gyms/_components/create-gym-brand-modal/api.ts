@@ -34,3 +34,31 @@ export async function createDifficultyColor({
 
   return data;
 }
+
+export type DifficultyColorResponse = {
+  id: number;
+  name: string;
+  colorCode: string;
+};
+
+export async function getDifficultyColors(
+  query: string,
+): Promise<DifficultyColorResponse[]> {
+  const params = new URLSearchParams();
+
+  if (query.trim()) {
+    params.set("query", query.trim());
+  }
+
+  const response = await fetch(`/api/difficulty-colors?${params.toString()}`, {
+    method: "GET",
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message || "색상 목록 조회에 실패하였습니다");
+  }
+
+  return data;
+}
