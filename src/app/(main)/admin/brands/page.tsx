@@ -1,12 +1,45 @@
-export default function AdminBrandsPage() {
+import { prisma } from "@/lib/prisma";
+import { formatDateKey } from "@/utils/date";
+import AdminBrandClient from "./_components/admin-brand-client/AdminBrandClient";
+
+export default async function AdminBrandsPage() {
+  const brands = await prisma.brand.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+    select: {
+      id: true,
+      name: true,
+      createdAt: true,
+      updatedAt: true,
+      colors: {
+        orderBy: {
+          order: "asc",
+        },
+        select: {
+          id: true,
+          order: true,
+          difficultyColor: {
+            select: {
+              id: true,
+              name: true,
+              colorCode: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  const brandItems = brands.map((brand) => ({
+    ...brand,
+    createdAt: formatDateKey(brand.createdAt),
+    updatedAt: formatDateKey(brand.updatedAt),
+  }));
+
   return (
     <div className="space-y-xl px-gutter py-lg">
-      <header className="rounded-2xl border border-outline-variant bg-surface-container-lowest p-6 shadow-sm">
-        <h1 className="headline-md text-on-surface">브랜드 관리</h1>
-        <p className="body-sm mt-2 text-on-surface-variant">
-          암장 브랜드와 브랜드별 난이도 색상을 관리합니다.
-        </p>
-      </header>
+      <AdminBrandClient brands={brandItems} />
     </div>
   );
 }
