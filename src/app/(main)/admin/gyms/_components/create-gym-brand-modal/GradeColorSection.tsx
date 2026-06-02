@@ -2,9 +2,10 @@
 
 import { Palette, Plus, Search } from "lucide-react";
 import { useState } from "react";
-import { previewGradeColors } from "./constants";
+import { previewGradeColors, savedGradeColors } from "./constants";
 import CreateColorModal from "./CreateColorModal";
 import GradeColorItem from "./GradeColorItem";
+import GradeColorSearchDropdown from "./GradeColorSearchDropdown";
 
 export default function GradeColorSection() {
   const [isCreateColorModalOpen, setIsCreateColorModalOpen] = useState(false);
@@ -39,6 +40,8 @@ export default function GradeColorSection() {
             placeholder="저장된 색상 검색"
             className="w-full rounded-lg border border-outline-variant bg-background py-3 pl-11 pr-4 font-label text-body-md text-on-surface outline-none transition-all placeholder:text-on-surface-variant focus:border-primary focus:ring-2 focus:ring-primary/20"
           />
+
+          <GradeColorSearchDropdown colors={savedGradeColors} />
         </div>
       </div>
 
