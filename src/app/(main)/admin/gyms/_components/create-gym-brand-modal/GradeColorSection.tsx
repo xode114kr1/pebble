@@ -15,7 +15,7 @@ export default function GradeColorSection() {
   const [searchResults, setSearchResults] = useState<GradeColor[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [selectedColors] = useState(previewGradeColors);
+  const [selectedColors, setSelectedColors] = useState(previewGradeColors);
 
   const handleSearchKeywordChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -33,7 +33,7 @@ export default function GradeColorSection() {
   };
 
   const handleSelectSearchResult = (color: GradeColor) => {
-    console.log(color);
+    setSelectedColors((prev) => [...prev, color]);
     setSearchKeyword("");
     setSearchResults([]);
     setIsDropdownOpen(false);
