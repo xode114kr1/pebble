@@ -1,5 +1,6 @@
 "use client";
 
+import useOutSideClick from "@/hooks/useOutSideClick";
 import { X } from "lucide-react";
 import { useState } from "react";
 import { createDifficultyColor } from "./api";
@@ -24,6 +25,8 @@ export default function CreateColorModal({
     setErrorMessage("");
     onClose();
   };
+
+  const modalRef = useOutSideClick<HTMLDivElement>(handleClose, isOpen);
 
   const handleSubmit = async () => {
     const trimmedName = name.trim();
@@ -61,7 +64,10 @@ export default function CreateColorModal({
 
   return (
     <div className="fixed inset-0 z-60 flex items-center justify-center bg-inverse-surface/70 px-4 py-6 backdrop-blur-sm">
-      <div className="flex w-[min(calc(100vw-32px),420px)] flex-col overflow-hidden rounded-2xl border border-outline-variant bg-surface-container-lowest shadow-2xl">
+      <div
+        ref={modalRef}
+        className="flex w-[min(calc(100vw-32px),420px)] flex-col overflow-hidden rounded-2xl border border-outline-variant bg-surface-container-lowest shadow-2xl"
+      >
         <div className="border-b border-outline-variant px-6 py-5">
           <div className="flex items-center justify-between gap-4">
             <h3 className="font-headline text-headline-sm text-on-surface">

@@ -1,5 +1,6 @@
 "use client";
 
+import useOutSideClick from "@/hooks/useOutSideClick";
 import { Building2, MapPin, Palette, X } from "lucide-react";
 import { useMemo, useState } from "react";
 import { GymBrand } from "../../types/adminGym";
@@ -16,6 +17,7 @@ export default function GymDetailModal({
   onClose,
 }: GymDetailModalProps) {
   const [selectedBrandId, setSelectedBrandId] = useState(brands[0]?.id ?? "");
+  const modalRef = useOutSideClick<HTMLDivElement>(onClose, isOpen);
 
   const selectedBrand = useMemo(
     () => brands.find((brand) => brand.id === selectedBrandId),
@@ -28,7 +30,10 @@ export default function GymDetailModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-inverse-surface/60 px-4 py-6 backdrop-blur-sm">
-      <div className="flex max-h-[88vh] w-[min(calc(100vw-32px),560px)] flex-col overflow-hidden rounded-2xl border border-outline-variant bg-surface-container-lowest shadow-2xl">
+      <div
+        ref={modalRef}
+        className="flex max-h-[88vh] w-[min(calc(100vw-32px),560px)] flex-col overflow-hidden rounded-2xl border border-outline-variant bg-surface-container-lowest shadow-2xl"
+      >
         <ModalHeader onClose={onClose} />
 
         <div className="space-y-6 overflow-y-auto px-6 py-6 sm:px-8">

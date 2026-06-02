@@ -1,3 +1,6 @@
+"use client";
+
+import useOutSideClick from "@/hooks/useOutSideClick";
 import { Building2, X } from "lucide-react";
 import GradeColorSection from "./GradeColorSection";
 
@@ -10,13 +13,18 @@ export default function CreateGymBrandModal({
   isOpen,
   onClose,
 }: CreateGymBrandModalProps) {
+  const modalRef = useOutSideClick<HTMLDivElement>(onClose, isOpen);
+
   if (!isOpen) {
     return null;
   }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-inverse-surface/60 px-4 py-6 backdrop-blur-sm">
-      <div className="flex max-h-[88vh] w-[min(calc(100vw-32px),560px)] flex-col overflow-hidden rounded-2xl border border-outline-variant bg-surface-container-lowest shadow-2xl">
+      <div
+        ref={modalRef}
+        className="flex max-h-[88vh] w-[min(calc(100vw-32px),560px)] flex-col overflow-hidden rounded-2xl border border-outline-variant bg-surface-container-lowest shadow-2xl"
+      >
         <ModalHeader onClose={onClose} />
 
         <div className="space-y-6 overflow-y-auto px-6 py-6 sm:px-8">
