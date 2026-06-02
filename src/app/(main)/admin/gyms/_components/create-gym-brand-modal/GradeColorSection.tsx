@@ -9,6 +9,7 @@ import GradeColorSearchDropdown from "./GradeColorSearchDropdown";
 
 export default function GradeColorSection() {
   const [isCreateColorModalOpen, setIsCreateColorModalOpen] = useState(false);
+  const [searchKeyword, setSearchKeyword] = useState("");
 
   return (
     <section className="space-y-4">
@@ -37,6 +38,8 @@ export default function GradeColorSection() {
 
           <input
             type="text"
+            value={searchKeyword}
+            onChange={(event) => setSearchKeyword(event.target.value)}
             placeholder="저장된 색상 검색"
             className="w-full rounded-lg border border-outline-variant bg-background py-3 pl-11 pr-4 font-label text-body-md text-on-surface outline-none transition-all placeholder:text-on-surface-variant focus:border-primary focus:ring-2 focus:ring-primary/20"
           />
