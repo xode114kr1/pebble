@@ -8,13 +8,20 @@ import GradeColorItem from "./GradeColorItem";
 import GradeColorSearchDropdown from "./GradeColorSearchDropdown";
 import { GradeColor } from "./types";
 
-export default function GradeColorSection() {
+type GradeColorSectionProps = {
+  selectedColors: GradeColor[];
+  onSelectedColorsChange: (selectedColors: GradeColor[]) => void;
+};
+
+export default function GradeColorSection({
+  selectedColors,
+  onSelectedColorsChange,
+}: GradeColorSectionProps) {
   const [isCreateColorModalOpen, setIsCreateColorModalOpen] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [searchResults, setSearchResults] = useState<GradeColor[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [selectedColors, setSelectedColors] = useState<GradeColor[]>([]);
 
   const handleSearchKeywordChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -32,21 +39,32 @@ export default function GradeColorSection() {
   };
 
   const handleSelectSearchResult = (color: GradeColor) => {
-    setSelectedColors((prev) => {
-      const isAlreadySelected = prev.some(
-        (selectedColor) => selectedColor.id === color.id,
-      );
+    const isAlreadySelected = selectedColors.some(
+      (selectedColor) => selectedColor.id === color.id,
+    );
 
-      if (isAlreadySelected) {
-        return prev;
-      }
+    if (!isAlreadySelected) {
+      onSelectedColorsChange([...selectedColors, color]);
+    }
 
-      return [...prev, color];
-    });
     setSearchKeyword("");
     setSearchResults([]);
     setIsSearching(false);
     setIsDropdownOpen(false);
+  };
+
+  const handleMoveSelectedColor = (fromIndex: number, toIndex: number) => {
+    const nextSelectedColors = [...selectedColors];
+    const [targetColor] = nextSelectedColors.splice(fromIndex, 1);
+
+    nextSelectedColors.splice(toIndex, 0, targetColor);
+    onSelectedColorsChange(nextSelectedColors);
+  };
+
+  const handleRemoveSelectedColor = (id: string) => {
+    onSelectedColorsChange(
+      selectedColors.filter((selectedColor) => selectedColor.id !== id),
+    );
   };
 
   useEffect(() => {
@@ -148,6 +166,9 @@ export default function GradeColorSection() {
               index={index}
               isFirst={index === 0}
               isLast={index === selectedColors.length - 1}
+              onMoveUp={() => handleMoveSelectedColor(index, index - 1)}
+              onMoveDown={() => handleMoveSelectedColor(index, index + 1)}
+              onRemove={() => handleRemoveSelectedColor(gradeColor.id)}
             />
           ))
         ) : (

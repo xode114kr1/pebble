@@ -36,9 +36,36 @@ model DifficultyColor {
   name      String
   colorCode String
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  brandColors BrandColor[]
 
   @@unique([name])
   @@unique([colorCode])
+}
+
+model Brand {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+
+  colors BrandColor[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model BrandColor {
+  id                Int @id @default(autoincrement())
+  brandId           Int
+  difficultyColorId Int
+  order             Int
+
+  brand           Brand           @relation(fields: [brandId], references: [id], onDelete: Cascade)
+  difficultyColor DifficultyColor @relation(fields: [difficultyColorId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([brandId, difficultyColorId])
+  @@unique([brandId, order])
 }
