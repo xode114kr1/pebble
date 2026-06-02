@@ -3,7 +3,6 @@
 import { Palette, Plus, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getDifficultyColors } from "./api";
-import { previewGradeColors } from "./constants";
 import CreateColorModal from "./CreateColorModal";
 import GradeColorItem from "./GradeColorItem";
 import GradeColorSearchDropdown from "./GradeColorSearchDropdown";
@@ -15,7 +14,7 @@ export default function GradeColorSection() {
   const [searchResults, setSearchResults] = useState<GradeColor[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [selectedColors, setSelectedColors] = useState(previewGradeColors);
+  const [selectedColors, setSelectedColors] = useState<GradeColor[]>([]);
 
   const handleSearchKeywordChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -141,15 +140,23 @@ export default function GradeColorSection() {
       </div>
 
       <div className="space-y-2 rounded-xl border border-outline-variant/50 bg-surface-container p-4">
-        {selectedColors.map((gradeColor, index) => (
-          <GradeColorItem
-            key={gradeColor.id}
-            gradeColor={gradeColor}
-            index={index}
-            isFirst={index === 0}
-            isLast={index === selectedColors.length - 1}
-          />
-        ))}
+        {selectedColors.length > 0 ? (
+          selectedColors.map((gradeColor, index) => (
+            <GradeColorItem
+              key={gradeColor.id}
+              gradeColor={gradeColor}
+              index={index}
+              isFirst={index === 0}
+              isLast={index === selectedColors.length - 1}
+            />
+          ))
+        ) : (
+          <div className="flex min-h-24 items-center justify-center rounded-lg border border-dashed border-outline-variant bg-background px-4 py-6">
+            <p className="text-center text-body-sm text-on-surface-variant">
+              검색으로 브랜드에 적용할 색상을 추가해주세요.
+            </p>
+          </div>
+        )}
       </div>
 
       <CreateColorModal
