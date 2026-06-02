@@ -6,10 +6,26 @@ import { previewGradeColors, savedGradeColors } from "./constants";
 import CreateColorModal from "./CreateColorModal";
 import GradeColorItem from "./GradeColorItem";
 import GradeColorSearchDropdown from "./GradeColorSearchDropdown";
+import { GradeColor } from "./types";
 
 export default function GradeColorSection() {
   const [isCreateColorModalOpen, setIsCreateColorModalOpen] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
+  const [searchResults, setSearchResults] = useState<GradeColor[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const handleSearchKeywordChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const keyword = event.target.value;
+    const hasKeyword = Boolean(keyword.trim());
+
+    setSearchKeyword(keyword);
+    setSearchResults(hasKeyword ? savedGradeColors : []);
+    setIsDropdownOpen(hasKeyword);
+    setIsSearching(false);
+  };
 
   return (
     <section className="space-y-4">
@@ -39,12 +55,14 @@ export default function GradeColorSection() {
           <input
             type="text"
             value={searchKeyword}
-            onChange={(event) => setSearchKeyword(event.target.value)}
+            onChange={handleSearchKeywordChange}
             placeholder="저장된 색상 검색"
             className="w-full rounded-lg border border-outline-variant bg-background py-3 pl-11 pr-4 font-label text-body-md text-on-surface outline-none transition-all placeholder:text-on-surface-variant focus:border-primary focus:ring-2 focus:ring-primary/20"
           />
 
-          <GradeColorSearchDropdown colors={savedGradeColors} />
+          {isDropdownOpen && !isSearching && (
+            <GradeColorSearchDropdown colors={searchResults} />
+          )}
         </div>
       </div>
 
