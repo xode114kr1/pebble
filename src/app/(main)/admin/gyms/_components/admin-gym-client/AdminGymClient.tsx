@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import CreateBrandModal from "../../../brands/_components/create-brand-modal/CreateBrandModal";
 import { GymBranchWithBrand, GymBrand } from "../../types/adminGym";
 import AdminGymHeader from "../admin-gym-header/AdminGymHeader";
 import AdminGymList from "../admin-gym-list/AdminGymList";
-import CreateGymBrandModal from "../create-gym-brand-modal/CreateGymBrandModal";
 import GymDetailModal from "../gym-detail-modal/GymDetailModal";
 
 export default function AdminGymClient({
@@ -30,7 +30,7 @@ export default function AdminGymClient({
         onCreateGymClick={() => setIsGymModalOpen(true)}
       />
       <AdminGymList gymlist={gymlist} />
-      <CreateGymBrandModal
+      <CreateBrandModal
         isOpen={isBrandModalOpen}
         onClose={() => setIsBrandModalOpen(false)}
       />

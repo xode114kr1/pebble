@@ -1,12 +1,4 @@
-import {
-  BarChart3,
-  Building2,
-  FileText,
-  Flag,
-  Megaphone,
-  Tags,
-  Users,
-} from "lucide-react";
+import { Building2, FileText, Flag, Megaphone, Tags, Users } from "lucide-react";
 import { AdminFeature } from "../types/admin";
 
 export const adminFeatures: AdminFeature[] = [

@@ -8,15 +8,15 @@ import { createBrand } from "./api";
 import GradeColorSection from "./GradeColorSection";
 import { GradeColor } from "./types";
 
-type CreateGymBrandModalProps = {
+type CreateBrandModalProps = {
   isOpen: boolean;
   onClose: () => void;
 };
 
-export default function CreateGymBrandModal({
+export default function CreateBrandModal({
   isOpen,
   onClose,
-}: CreateGymBrandModalProps) {
+}: CreateBrandModalProps) {
   const router = useRouter();
   const [brandName, setBrandName] = useState("");
   const [selectedColors, setSelectedColors] = useState<GradeColor[]>([]);
