@@ -15,6 +15,7 @@ export default function GradeColorSection() {
   const [searchResults, setSearchResults] = useState<GradeColor[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [selectedColors] = useState(previewGradeColors);
 
   const handleSearchKeywordChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -129,13 +130,13 @@ export default function GradeColorSection() {
       </div>
 
       <div className="space-y-2 rounded-xl border border-outline-variant/50 bg-surface-container p-4">
-        {previewGradeColors.map((gradeColor, index) => (
+        {selectedColors.map((gradeColor, index) => (
           <GradeColorItem
             key={gradeColor.id}
             gradeColor={gradeColor}
             index={index}
             isFirst={index === 0}
-            isLast={index === previewGradeColors.length - 1}
+            isLast={index === selectedColors.length - 1}
           />
         ))}
       </div>
