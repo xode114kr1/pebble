@@ -34,6 +34,7 @@ export default function CreateGymBrandModal({
 
   const handleSubmit = async () => {
     const trimmedName = brandName.trim();
+    const difficultyColorIds = selectedColors.map((color) => Number(color.id));
 
     if (!trimmedName) {
       setErrorMessage("브랜드 이름을 입력해주세요.");
@@ -45,13 +46,23 @@ export default function CreateGymBrandModal({
       return;
     }
 
+    const hasInvalidDifficultyColorId = difficultyColorIds.some(
+      (difficultyColorId) =>
+        !Number.isInteger(difficultyColorId) || difficultyColorId <= 0,
+    );
+
+    if (hasInvalidDifficultyColorId) {
+      setErrorMessage("올바른 난이도 색상을 선택해주세요.");
+      return;
+    }
+
     try {
       setIsSubmitting(true);
       setErrorMessage("");
 
       await createBrand({
         name: trimmedName,
-        difficultyColorIds: selectedColors.map((color) => Number(color.id)),
+        difficultyColorIds,
       });
 
       router.refresh();
@@ -82,11 +93,17 @@ export default function CreateGymBrandModal({
         <div className="space-y-6 overflow-y-auto px-6 py-6 sm:px-8">
           <BrandNameSection
             brandName={brandName}
-            onBrandNameChange={setBrandName}
+            onBrandNameChange={(nextBrandName) => {
+              setBrandName(nextBrandName);
+              setErrorMessage("");
+            }}
           />
           <GradeColorSection
             selectedColors={selectedColors}
-            onSelectedColorsChange={setSelectedColors}
+            onSelectedColorsChange={(nextSelectedColors) => {
+              setSelectedColors(nextSelectedColors);
+              setErrorMessage("");
+            }}
           />
 
           {errorMessage && (

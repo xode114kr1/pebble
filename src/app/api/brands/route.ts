@@ -57,8 +57,9 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     const { name, difficultyColorIds } = body;
+    const trimmedName = typeof name === "string" ? name.trim() : "";
 
-    if (!name || !difficultyColorIds) {
+    if (!trimmedName || !difficultyColorIds) {
       return NextResponse.json(
         { message: "브랜드 이름과 난이도 색상은 필수입니다." },
         { status: 400 },
@@ -95,7 +96,7 @@ export async function POST(request: Request) {
 
     const existingBrand = await prisma.brand.findUnique({
       where: {
-        name,
+        name: trimmedName,
       },
     });
 
@@ -123,7 +124,7 @@ export async function POST(request: Request) {
 
     const brand = await prisma.brand.create({
       data: {
-        name,
+        name: trimmedName,
         colors: {
           create: difficultyColorIds.map((difficultyColorId, index) => ({
             difficultyColorId,
