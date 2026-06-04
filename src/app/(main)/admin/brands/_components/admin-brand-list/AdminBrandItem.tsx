@@ -28,7 +28,7 @@ export default function AdminBrandItem({
       <td className="hidden px-lg py-md lg:table-cell">
         <div className="flex items-center">
           {brand.colors.length > 0 ? (
-            <div className="flex overflow-hidden">
+            <div className="flex overflow-hidden shadow-[0_0_0_1px_rgba(0,0,0,0.12)]">
               {brand.colors.map((brandColor) => (
                 <span
                   key={brandColor.id}
