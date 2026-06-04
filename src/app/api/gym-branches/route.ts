@@ -1,6 +1,71 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
+const DEFAULT_PAGE_SIZE = 20;
+
+function parsePositiveInteger(value: string | null) {
+  if (!value) {
+    return null;
+  }
+
+  const parsedValue = Number(value);
+
+  if (!Number.isInteger(parsedValue) || parsedValue <= 0) {
+    return null;
+  }
+
+  return parsedValue;
+}
+
+export async function GET(request: Request) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const page = parsePositiveInteger(searchParams.get("page"));
+    const pageSize = parsePositiveInteger(searchParams.get("pageSize"));
+    const shouldPaginate = page !== null || pageSize !== null;
+    const take = shouldPaginate ? (pageSize ?? DEFAULT_PAGE_SIZE) : undefined;
+    const skip =
+      shouldPaginate && take !== undefined ? ((page ?? 1) - 1) * take : undefined;
+
+    const gymBranches = await prisma.gymBranch.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+      skip,
+      take,
+      include: {
+        brand: {
+          include: {
+            colors: {
+              orderBy: {
+                order: "asc",
+              },
+              include: {
+                difficultyColor: {
+                  select: {
+                    id: true,
+                    name: true,
+                    colorCode: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return NextResponse.json(gymBranches);
+  } catch (error) {
+    console.error(error);
+
+    return NextResponse.json(
+      { message: "암장 지점 목록 조회 중 오류가 발생했습니다." },
+      { status: 500 },
+    );
+  }
+}
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
