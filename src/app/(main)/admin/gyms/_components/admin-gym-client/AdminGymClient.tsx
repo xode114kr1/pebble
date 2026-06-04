@@ -18,23 +18,46 @@ export default function AdminGymClient({
 }) {
   const router = useRouter();
   const [isGymModalOpen, setIsGymModalOpen] = useState(false);
+  const [selectedGymBranch, setSelectedGymBranch] =
+    useState<GymBranchWithBrand | null>(null);
+
+  const handleCreateGymClick = () => {
+    setSelectedGymBranch(null);
+    setIsGymModalOpen(true);
+  };
+
+  const handleGymClick = (gymBranch: GymBranchWithBrand) => {
+    setSelectedGymBranch(gymBranch);
+    setIsGymModalOpen(true);
+  };
+
+  const handleGymModalClose = () => {
+    setIsGymModalOpen(false);
+    setSelectedGymBranch(null);
+  };
 
   return (
     <>
       <AdminGymHeader
         query={query}
-        onCreateGymClick={() => setIsGymModalOpen(true)}
+        onCreateGymClick={handleCreateGymClick}
       />
-      <AdminGymList gymlist={gymlist} query={query} />
+      <AdminGymList
+        gymlist={gymlist}
+        query={query}
+        onGymClick={handleGymClick}
+      />
       {isGymModalOpen ? (
         <GymDetailModal
-          mode="create"
+          key={selectedGymBranch ? `edit-${selectedGymBranch.id}` : "create"}
+          mode={selectedGymBranch ? "edit" : "create"}
           brands={brands}
           isOpen={isGymModalOpen}
-          initialData={null}
-          onClose={() => setIsGymModalOpen(false)}
+          initialData={selectedGymBranch}
+          onClose={handleGymModalClose}
           onCreated={() => {
             setIsGymModalOpen(false);
+            setSelectedGymBranch(null);
             router.refresh();
           }}
         />

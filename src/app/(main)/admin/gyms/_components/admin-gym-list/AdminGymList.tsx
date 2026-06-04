@@ -5,9 +5,11 @@ import AdminGymItem from "./AdminGymItem";
 export default function AdminGymList({
   gymlist,
   query,
+  onGymClick,
 }: {
   gymlist: GymBranchWithBrand[];
   query: string;
+  onGymClick: (gymBranch: GymBranchWithBrand) => void;
 }) {
   const hasSearchQuery = Boolean(query.trim());
 
@@ -37,7 +39,11 @@ export default function AdminGymList({
         <tbody className="divide-y divide-outline-variant">
           {gymlist.length > 0 ? (
             gymlist.map((branch) => (
-              <AdminGymItem key={branch.id} branch={branch} />
+              <AdminGymItem
+                key={branch.id}
+                branch={branch}
+                onClick={() => onGymClick(branch)}
+              />
             ))
           ) : (
             <tr>
