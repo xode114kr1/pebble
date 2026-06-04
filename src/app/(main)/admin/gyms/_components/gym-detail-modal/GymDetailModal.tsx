@@ -13,6 +13,13 @@ type GymDetailModalProps = {
   onCreated: () => void;
 };
 
+type GymBranchFormErrors = {
+  brandId?: string;
+  branchName?: string;
+  location?: string;
+  form?: string;
+};
+
 export default function GymDetailModal({
   brands,
   isOpen,
@@ -24,7 +31,7 @@ export default function GymDetailModal({
   );
   const [branchName, setBranchName] = useState("");
   const [location, setLocation] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errors, setErrors] = useState<GymBranchFormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const modalRef = useOutSideClick<HTMLDivElement>(onClose, isOpen);
 
@@ -33,26 +40,47 @@ export default function GymDetailModal({
     [brands, selectedBrandId],
   );
 
+  const clearErrors = (...fieldNames: (keyof GymBranchFormErrors)[]) => {
+    setErrors((currentErrors) => {
+      const nextErrors = { ...currentErrors };
+
+      fieldNames.forEach((fieldName) => {
+        delete nextErrors[fieldName];
+      });
+      delete nextErrors.form;
+
+      return nextErrors;
+    });
+  };
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const parsedBrandId = Number(selectedBrandId);
     const trimmedBranchName = branchName.trim();
     const trimmedLocation = location.trim();
+    const nextErrors: GymBranchFormErrors = {};
 
     if (!Number.isInteger(parsedBrandId) || parsedBrandId <= 0) {
-      setErrorMessage("브랜드를 선택해주세요.");
-      return;
+      nextErrors.brandId = "브랜드를 선택해주세요.";
     }
 
-    if (!trimmedBranchName || !trimmedLocation) {
-      setErrorMessage("지점명과 장소를 입력해주세요.");
+    if (!trimmedBranchName) {
+      nextErrors.branchName = "지점명을 입력해주세요.";
+    }
+
+    if (!trimmedLocation) {
+      nextErrors.location = "장소를 입력해주세요.";
+    }
+
+    if (Object.keys(nextErrors).length > 0) {
+      setErrors(nextErrors);
       return;
     }
 
     try {
       setIsSubmitting(true);
-      setErrorMessage("");
+      setErrors({});
 
       await createGymBranch({
         brandId: parsedBrandId,
@@ -62,11 +90,12 @@ export default function GymDetailModal({
 
       onCreated();
     } catch (error) {
-      setErrorMessage(
-        error instanceof Error
-          ? error.message
-          : "암장 지점 등록에 실패하였습니다",
-      );
+      setErrors({
+        form:
+          error instanceof Error
+            ? error.message
+            : "암장 지점 등록에 실패하였습니다",
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -89,9 +118,10 @@ export default function GymDetailModal({
             <BrandSelect
               brands={brands}
               selectedBrandId={selectedBrandId}
+              errorMessage={errors.brandId}
               onChange={(brandId) => {
                 setSelectedBrandId(brandId);
-                setErrorMessage("");
+                clearErrors("brandId");
               }}
             />
 
@@ -101,9 +131,10 @@ export default function GymDetailModal({
               placeholder="예: 강남점"
               icon={<Building2 size={18} />}
               value={branchName}
+              errorMessage={errors.branchName}
               onChange={(nextBranchName) => {
                 setBranchName(nextBranchName);
-                setErrorMessage("");
+                clearErrors("branchName");
               }}
             />
 
@@ -113,17 +144,18 @@ export default function GymDetailModal({
               placeholder="예: 서울 강남구 테헤란로"
               icon={<MapPin size={18} />}
               value={location}
+              errorMessage={errors.location}
               onChange={(nextLocation) => {
                 setLocation(nextLocation);
-                setErrorMessage("");
+                clearErrors("location");
               }}
             />
 
             <GradeColorSection brand={selectedBrand} />
 
-            {errorMessage ? (
+            {errors.form ? (
               <p className="rounded-lg bg-error-container px-4 py-3 font-label text-label-md text-on-error-container">
-                {errorMessage}
+                {errors.form}
               </p>
             ) : null}
           </div>
@@ -165,12 +197,16 @@ function ModalHeader({ onClose }: { onClose: () => void }) {
 function BrandSelect({
   brands,
   selectedBrandId,
+  errorMessage,
   onChange,
 }: {
   brands: GymBrand[];
   selectedBrandId: string;
+  errorMessage?: string;
   onChange: (brandId: string) => void;
 }) {
+  const errorMessageId = "gym-brand-error";
+
   return (
     <section className="space-y-3">
       <label
@@ -185,6 +221,8 @@ function BrandSelect({
         value={selectedBrandId}
         onChange={(event) => onChange(event.target.value)}
         disabled={brands.length === 0}
+        aria-invalid={Boolean(errorMessage)}
+        aria-describedby={errorMessage ? errorMessageId : undefined}
         className="w-full rounded-lg border border-outline-variant bg-background px-4 py-3 font-label text-body-md text-on-surface outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
       >
         {brands.length === 0 ? (
@@ -196,6 +234,12 @@ function BrandSelect({
           </option>
         ))}
       </select>
+
+      {errorMessage ? (
+        <p id={errorMessageId} className="text-body-sm text-error">
+          {errorMessage}
+        </p>
+      ) : null}
     </section>
   );
 }
@@ -206,6 +250,7 @@ function TextField({
   placeholder,
   icon,
   value,
+  errorMessage,
   onChange,
 }: {
   id: string;
@@ -213,8 +258,11 @@ function TextField({
   placeholder: string;
   icon: React.ReactNode;
   value: string;
+  errorMessage?: string;
   onChange: (value: string) => void;
 }) {
+  const errorMessageId = `${id}-error`;
+
   return (
     <section className="space-y-3">
       <label
@@ -235,9 +283,17 @@ function TextField({
           placeholder={placeholder}
           value={value}
           onChange={(event) => onChange(event.target.value)}
+          aria-invalid={Boolean(errorMessage)}
+          aria-describedby={errorMessage ? errorMessageId : undefined}
           className="w-full rounded-lg border border-outline-variant bg-background py-3 pl-11 pr-4 font-label text-body-md text-on-surface outline-none transition-all placeholder:text-on-surface-variant focus:border-primary focus:ring-2 focus:ring-primary/20"
         />
       </div>
+
+      {errorMessage ? (
+        <p id={errorMessageId} className="text-body-sm text-error">
+          {errorMessage}
+        </p>
+      ) : null}
     </section>
   );
 }
