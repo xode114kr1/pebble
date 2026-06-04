@@ -5,7 +5,7 @@ import { Building2, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { AdminBrand } from "../../types/adminBrand";
-import { createBrand } from "./api";
+import { createBrand, updateBrand } from "./api";
 import GradeColorSection from "./GradeColorSection";
 import { GradeColor } from "./types";
 
@@ -70,8 +70,8 @@ export default function BrandFormModal({
       return;
     }
 
-    if (mode === "edit") {
-      setErrorMessage("브랜드 수정 API 연결 후 수정할 수 있습니다.");
+    if (mode === "edit" && !initialBrand) {
+      setErrorMessage("수정할 브랜드를 선택해주세요.");
       return;
     }
 
@@ -79,10 +79,17 @@ export default function BrandFormModal({
       setIsSubmitting(true);
       setErrorMessage("");
 
-      await createBrand({
-        name: trimmedName,
-        difficultyColorIds,
-      });
+      if (mode === "edit" && initialBrand) {
+        await updateBrand(initialBrand.id, {
+          name: trimmedName,
+          difficultyColorIds,
+        });
+      } else {
+        await createBrand({
+          name: trimmedName,
+          difficultyColorIds,
+        });
+      }
 
       router.refresh();
       handleClose();
@@ -90,7 +97,7 @@ export default function BrandFormModal({
       setErrorMessage(
         error instanceof Error
           ? error.message
-          : "브랜드 등록 중 오류가 발생했습니다.",
+          : `브랜드 ${mode === "create" ? "등록" : "수정"} 중 오류가 발생했습니다.`,
       );
     } finally {
       setIsSubmitting(false);
