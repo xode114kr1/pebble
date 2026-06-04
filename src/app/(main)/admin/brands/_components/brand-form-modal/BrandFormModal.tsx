@@ -8,15 +8,19 @@ import { createBrand } from "./api";
 import GradeColorSection from "./GradeColorSection";
 import { GradeColor } from "./types";
 
-type CreateBrandModalProps = {
+type BrandFormModalMode = "create" | "edit";
+
+type BrandFormModalProps = {
+  mode: BrandFormModalMode;
   isOpen: boolean;
   onClose: () => void;
 };
 
-export default function CreateBrandModal({
+export default function BrandFormModal({
+  mode,
   isOpen,
   onClose,
-}: CreateBrandModalProps) {
+}: BrandFormModalProps) {
   const router = useRouter();
   const [brandName, setBrandName] = useState("");
   const [selectedColors, setSelectedColors] = useState<GradeColor[]>([]);
@@ -88,7 +92,7 @@ export default function CreateBrandModal({
         ref={modalRef}
         className="flex max-h-[88vh] w-[min(calc(100vw-32px),560px)] flex-col overflow-hidden rounded-2xl border border-outline-variant bg-surface-container-lowest shadow-2xl"
       >
-        <ModalHeader onClose={handleClose} />
+        <ModalHeader mode={mode} onClose={handleClose} />
 
         <div className="space-y-6 overflow-y-auto px-6 py-6 sm:px-8">
           <BrandNameSection
@@ -112,6 +116,7 @@ export default function CreateBrandModal({
         </div>
 
         <ModalFooter
+          mode={mode}
           isSubmitting={isSubmitting}
           onClose={handleClose}
           onSubmit={handleSubmit}
@@ -121,13 +126,20 @@ export default function CreateBrandModal({
   );
 }
 
-function ModalHeader({ onClose }: { onClose: () => void }) {
+type ModalHeaderProps = {
+  mode: BrandFormModalMode;
+  onClose: () => void;
+};
+
+function ModalHeader({ mode, onClose }: ModalHeaderProps) {
+  const title = mode === "create" ? "암장 브랜드 등록" : "암장 브랜드 수정";
+
   return (
     <div className="border-b border-outline-variant px-6 py-5 sm:px-8 sm:py-6">
       <div className="flex items-center justify-between gap-4">
         <div>
           <h2 className="font-headline text-headline-md text-on-surface">
-            암장 브랜드 등록
+            {title}
           </h2>
         </div>
 
@@ -181,12 +193,21 @@ function BrandNameSection({
 }
 
 type ModalFooterProps = {
+  mode: BrandFormModalMode;
   isSubmitting: boolean;
   onClose: () => void;
   onSubmit: () => void;
 };
 
-function ModalFooter({ isSubmitting, onClose, onSubmit }: ModalFooterProps) {
+function ModalFooter({
+  mode,
+  isSubmitting,
+  onClose,
+  onSubmit,
+}: ModalFooterProps) {
+  const submitLabel = mode === "create" ? "등록하기" : "수정하기";
+  const submittingLabel = mode === "create" ? "등록 중" : "수정 중";
+
   return (
     <div className="flex justify-end gap-3 border-t border-outline-variant bg-surface-container-low px-6 py-5 sm:px-8 sm:py-6">
       <button
@@ -204,7 +225,7 @@ function ModalFooter({ isSubmitting, onClose, onSubmit }: ModalFooterProps) {
         disabled={isSubmitting}
         className="rounded-lg bg-primary px-8 py-2.5 font-label text-label-md font-medium text-on-primary shadow-md shadow-primary/20 transition-all hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {isSubmitting ? "등록 중" : "등록하기"}
+        {isSubmitting ? submittingLabel : submitLabel}
       </button>
     </div>
   );

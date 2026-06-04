@@ -4,7 +4,7 @@ import { useState } from "react";
 import { AdminBrand } from "../../types/adminBrand";
 import AdminBrandHeader from "../admin-brand-header/AdminBrandHeader";
 import AdminBrandList from "../admin-brand-list/AdminBrandList";
-import CreateBrandModal from "../create-brand-modal/CreateBrandModal";
+import BrandFormModal from "../brand-form-modal/BrandFormModal";
 
 export default function AdminBrandClient({
   brands,
@@ -22,7 +22,8 @@ export default function AdminBrandClient({
         onCreateBrandClick={() => setIsBrandModalOpen(true)}
       />
       <AdminBrandList brands={brands} />
-      <CreateBrandModal
+      <BrandFormModal
+        mode="create"
         isOpen={isBrandModalOpen}
         onClose={() => setIsBrandModalOpen(false)}
       />
