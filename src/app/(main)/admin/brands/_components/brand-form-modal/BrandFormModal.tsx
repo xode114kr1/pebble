@@ -18,6 +18,16 @@ type BrandFormModalProps = {
   onClose: () => void;
 };
 
+function getInitialSelectedColors(initialBrand?: AdminBrand | null) {
+  return (
+    initialBrand?.colors.map((brandColor) => ({
+      id: String(brandColor.difficultyColor.id),
+      name: brandColor.difficultyColor.name,
+      color: brandColor.difficultyColor.colorCode,
+    })) ?? []
+  );
+}
+
 export default function BrandFormModal({
   mode,
   isOpen,
@@ -27,17 +37,16 @@ export default function BrandFormModal({
   const router = useRouter();
   const [brandName, setBrandName] = useState(initialBrand?.name ?? "");
   const [selectedColors, setSelectedColors] = useState<GradeColor[]>(
-    () =>
-      initialBrand?.colors.map((brandColor) => ({
-        id: String(brandColor.difficultyColor.id),
-        name: brandColor.difficultyColor.name,
-        color: brandColor.difficultyColor.colorCode,
-      })) ?? [],
+    () => getInitialSelectedColors(initialBrand),
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleClose = () => {
+    if (isSubmitting) {
+      return;
+    }
+
     setBrandName("");
     setSelectedColors([]);
     setErrorMessage("");
@@ -47,6 +56,10 @@ export default function BrandFormModal({
   const modalRef = useOutSideClick<HTMLDivElement>(handleClose, isOpen);
 
   const handleSubmit = async () => {
+    if (isSubmitting) {
+      return;
+    }
+
     const trimmedName = brandName.trim();
     const difficultyColorIds = selectedColors.map((color) => Number(color.id));
 
