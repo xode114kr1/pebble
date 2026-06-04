@@ -1,14 +1,14 @@
 import { GradeColor } from "@/types/gym";
 
 export type GymBrand = {
-  id: string;
+  id: number;
   name: string;
   gradeColors: GradeColor[];
 };
 
 export type GymBranch = {
-  id: string;
-  brandId: string;
+  id: number;
+  brandId: number;
   branchName: string;
   location: string;
   createdAt: string;
