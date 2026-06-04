@@ -6,9 +6,20 @@ import { FormEvent, useMemo, useState } from "react";
 import { GymBrand } from "../../types/adminGym";
 import { createGymBranch } from "./api";
 
+type GymDetailModalMode = "create" | "edit";
+
+type GymDetailInitialData = {
+  id: number;
+  brandId: number;
+  branchName: string;
+  location: string;
+};
+
 type GymDetailModalProps = {
+  mode: GymDetailModalMode;
   brands: GymBrand[];
   isOpen: boolean;
+  initialData?: GymDetailInitialData | null;
   onClose: () => void;
   onCreated: () => void;
 };
@@ -21,16 +32,18 @@ type GymBranchFormErrors = {
 };
 
 export default function GymDetailModal({
+  mode,
   brands,
   isOpen,
+  initialData,
   onClose,
   onCreated,
 }: GymDetailModalProps) {
   const [selectedBrandId, setSelectedBrandId] = useState(
-    String(brands[0]?.id ?? ""),
+    String(initialData?.brandId ?? brands[0]?.id ?? ""),
   );
-  const [branchName, setBranchName] = useState("");
-  const [location, setLocation] = useState("");
+  const [branchName, setBranchName] = useState(initialData?.branchName ?? "");
+  const [location, setLocation] = useState(initialData?.location ?? "");
   const [errors, setErrors] = useState<GymBranchFormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const modalRef = useOutSideClick<HTMLDivElement>(onClose, isOpen);
@@ -82,6 +95,11 @@ export default function GymDetailModal({
       setIsSubmitting(true);
       setErrors({});
 
+      if (mode === "edit") {
+        setErrors({ form: "암장 지점 수정 기능은 아직 준비 중입니다." });
+        return;
+      }
+
       await createGymBranch({
         brandId: parsedBrandId,
         name: trimmedBranchName,
@@ -111,7 +129,7 @@ export default function GymDetailModal({
         ref={modalRef}
         className="flex max-h-[88vh] w-[min(calc(100vw-32px),560px)] flex-col overflow-hidden rounded-2xl border border-outline-variant bg-surface-container-lowest shadow-2xl"
       >
-        <ModalHeader onClose={onClose} />
+        <ModalHeader mode={mode} onClose={onClose} />
 
         <form onSubmit={handleSubmit} className="flex min-h-0 flex-col">
           <div className="space-y-6 overflow-y-auto px-6 py-6 sm:px-8">
@@ -161,8 +179,9 @@ export default function GymDetailModal({
           </div>
 
           <ModalFooter
+            mode={mode}
             isSubmitDisabled={brands.length === 0 || isSubmitting}
-            submitLabel={isSubmitting ? "등록 중" : "등록하기"}
+            isSubmitting={isSubmitting}
             onClose={onClose}
           />
         </form>
@@ -171,13 +190,21 @@ export default function GymDetailModal({
   );
 }
 
-function ModalHeader({ onClose }: { onClose: () => void }) {
+function ModalHeader({
+  mode,
+  onClose,
+}: {
+  mode: GymDetailModalMode;
+  onClose: () => void;
+}) {
+  const title = mode === "create" ? "암장 지점 등록" : "암장 지점 수정";
+
   return (
     <div className="border-b border-outline-variant px-6 py-5 sm:px-8 sm:py-6">
       <div className="flex items-center justify-between gap-4">
         <div>
           <h2 className="font-headline text-headline-md text-on-surface">
-            암장 지점 등록
+            {title}
           </h2>
         </div>
 
@@ -338,14 +365,19 @@ function GradeColorSection({ brand }: { brand?: GymBrand }) {
   );
 }
 function ModalFooter({
+  mode,
   isSubmitDisabled,
-  submitLabel,
+  isSubmitting,
   onClose,
 }: {
+  mode: GymDetailModalMode;
   isSubmitDisabled: boolean;
-  submitLabel: string;
+  isSubmitting: boolean;
   onClose: () => void;
 }) {
+  const submitLabel = mode === "create" ? "등록하기" : "수정하기";
+  const submittingLabel = mode === "create" ? "등록 중" : "수정 중";
+
   return (
     <div className="flex justify-end gap-3 border-t border-outline-variant bg-surface-container-low px-6 py-5 sm:px-8 sm:py-6">
       <button
@@ -361,7 +393,7 @@ function ModalFooter({
         disabled={isSubmitDisabled}
         className="rounded-lg bg-primary px-8 py-2.5 font-label text-label-md font-medium text-on-primary shadow-md shadow-primary/20 transition-all hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
       >
-        {submitLabel}
+        {isSubmitting ? submittingLabel : submitLabel}
       </button>
     </div>
   );

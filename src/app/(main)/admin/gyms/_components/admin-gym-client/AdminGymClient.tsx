@@ -28,8 +28,10 @@ export default function AdminGymClient({
       <AdminGymList gymlist={gymlist} query={query} />
       {isGymModalOpen ? (
         <GymDetailModal
+          mode="create"
           brands={brands}
           isOpen={isGymModalOpen}
+          initialData={null}
           onClose={() => setIsGymModalOpen(false)}
           onCreated={() => {
             setIsGymModalOpen(false);
