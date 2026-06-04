@@ -4,26 +4,49 @@ import useOutSideClick from "@/hooks/useOutSideClick";
 import { Building2, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { createBrand } from "./api";
+import { AdminBrand } from "../../types/adminBrand";
+import { createBrand, updateBrand } from "./api";
 import GradeColorSection from "./GradeColorSection";
 import { GradeColor } from "./types";
 
-type CreateGymBrandModalProps = {
+type BrandFormModalMode = "create" | "edit";
+
+type BrandFormModalProps = {
+  mode: BrandFormModalMode;
   isOpen: boolean;
+  initialBrand?: AdminBrand | null;
   onClose: () => void;
 };
 
-export default function CreateGymBrandModal({
+function getInitialSelectedColors(initialBrand?: AdminBrand | null) {
+  return (
+    initialBrand?.colors.map((brandColor) => ({
+      id: String(brandColor.difficultyColor.id),
+      name: brandColor.difficultyColor.name,
+      color: brandColor.difficultyColor.colorCode,
+    })) ?? []
+  );
+}
+
+export default function BrandFormModal({
+  mode,
   isOpen,
+  initialBrand,
   onClose,
-}: CreateGymBrandModalProps) {
+}: BrandFormModalProps) {
   const router = useRouter();
-  const [brandName, setBrandName] = useState("");
-  const [selectedColors, setSelectedColors] = useState<GradeColor[]>([]);
+  const [brandName, setBrandName] = useState(initialBrand?.name ?? "");
+  const [selectedColors, setSelectedColors] = useState<GradeColor[]>(
+    () => getInitialSelectedColors(initialBrand),
+  );
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleClose = () => {
+    if (isSubmitting) {
+      return;
+    }
+
     setBrandName("");
     setSelectedColors([]);
     setErrorMessage("");
@@ -33,6 +56,10 @@ export default function CreateGymBrandModal({
   const modalRef = useOutSideClick<HTMLDivElement>(handleClose, isOpen);
 
   const handleSubmit = async () => {
+    if (isSubmitting) {
+      return;
+    }
+
     const trimmedName = brandName.trim();
     const difficultyColorIds = selectedColors.map((color) => Number(color.id));
 
@@ -56,14 +83,26 @@ export default function CreateGymBrandModal({
       return;
     }
 
+    if (mode === "edit" && !initialBrand) {
+      setErrorMessage("수정할 브랜드를 선택해주세요.");
+      return;
+    }
+
     try {
       setIsSubmitting(true);
       setErrorMessage("");
 
-      await createBrand({
-        name: trimmedName,
-        difficultyColorIds,
-      });
+      if (mode === "edit" && initialBrand) {
+        await updateBrand(initialBrand.id, {
+          name: trimmedName,
+          difficultyColorIds,
+        });
+      } else {
+        await createBrand({
+          name: trimmedName,
+          difficultyColorIds,
+        });
+      }
 
       router.refresh();
       handleClose();
@@ -71,7 +110,7 @@ export default function CreateGymBrandModal({
       setErrorMessage(
         error instanceof Error
           ? error.message
-          : "브랜드 등록 중 오류가 발생했습니다.",
+          : `브랜드 ${mode === "create" ? "등록" : "수정"} 중 오류가 발생했습니다.`,
       );
     } finally {
       setIsSubmitting(false);
@@ -88,7 +127,7 @@ export default function CreateGymBrandModal({
         ref={modalRef}
         className="flex max-h-[88vh] w-[min(calc(100vw-32px),560px)] flex-col overflow-hidden rounded-2xl border border-outline-variant bg-surface-container-lowest shadow-2xl"
       >
-        <ModalHeader onClose={handleClose} />
+        <ModalHeader mode={mode} onClose={handleClose} />
 
         <div className="space-y-6 overflow-y-auto px-6 py-6 sm:px-8">
           <BrandNameSection
@@ -112,6 +151,7 @@ export default function CreateGymBrandModal({
         </div>
 
         <ModalFooter
+          mode={mode}
           isSubmitting={isSubmitting}
           onClose={handleClose}
           onSubmit={handleSubmit}
@@ -121,13 +161,20 @@ export default function CreateGymBrandModal({
   );
 }
 
-function ModalHeader({ onClose }: { onClose: () => void }) {
+type ModalHeaderProps = {
+  mode: BrandFormModalMode;
+  onClose: () => void;
+};
+
+function ModalHeader({ mode, onClose }: ModalHeaderProps) {
+  const title = mode === "create" ? "암장 브랜드 등록" : "암장 브랜드 수정";
+
   return (
     <div className="border-b border-outline-variant px-6 py-5 sm:px-8 sm:py-6">
       <div className="flex items-center justify-between gap-4">
         <div>
           <h2 className="font-headline text-headline-md text-on-surface">
-            암장 브랜드 등록
+            {title}
           </h2>
         </div>
 
@@ -181,12 +228,21 @@ function BrandNameSection({
 }
 
 type ModalFooterProps = {
+  mode: BrandFormModalMode;
   isSubmitting: boolean;
   onClose: () => void;
   onSubmit: () => void;
 };
 
-function ModalFooter({ isSubmitting, onClose, onSubmit }: ModalFooterProps) {
+function ModalFooter({
+  mode,
+  isSubmitting,
+  onClose,
+  onSubmit,
+}: ModalFooterProps) {
+  const submitLabel = mode === "create" ? "등록하기" : "수정하기";
+  const submittingLabel = mode === "create" ? "등록 중" : "수정 중";
+
   return (
     <div className="flex justify-end gap-3 border-t border-outline-variant bg-surface-container-low px-6 py-5 sm:px-8 sm:py-6">
       <button
@@ -204,7 +260,7 @@ function ModalFooter({ isSubmitting, onClose, onSubmit }: ModalFooterProps) {
         disabled={isSubmitting}
         className="rounded-lg bg-primary px-8 py-2.5 font-label text-label-md font-medium text-on-primary shadow-md shadow-primary/20 transition-all hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {isSubmitting ? "등록 중" : "등록하기"}
+        {isSubmitting ? submittingLabel : submitLabel}
       </button>
     </div>
   );

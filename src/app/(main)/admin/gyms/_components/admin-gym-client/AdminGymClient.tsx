@@ -4,7 +4,6 @@ import { useState } from "react";
 import { GymBranchWithBrand, GymBrand } from "../../types/adminGym";
 import AdminGymHeader from "../admin-gym-header/AdminGymHeader";
 import AdminGymList from "../admin-gym-list/AdminGymList";
-import CreateGymBrandModal from "../create-gym-brand-modal/CreateGymBrandModal";
 import GymDetailModal from "../gym-detail-modal/GymDetailModal";
 
 export default function AdminGymClient({
@@ -12,7 +11,6 @@ export default function AdminGymClient({
 }: {
   gymlist: GymBranchWithBrand[];
 }) {
-  const [isBrandModalOpen, setIsBrandModalOpen] = useState(false);
   const [isGymModalOpen, setIsGymModalOpen] = useState(false);
 
   const brands = gymlist.reduce<GymBrand[]>((acc, branch) => {
@@ -25,15 +23,8 @@ export default function AdminGymClient({
 
   return (
     <>
-      <AdminGymHeader
-        onCreateBrandClick={() => setIsBrandModalOpen(true)}
-        onCreateGymClick={() => setIsGymModalOpen(true)}
-      />
+      <AdminGymHeader onCreateGymClick={() => setIsGymModalOpen(true)} />
       <AdminGymList gymlist={gymlist} />
-      <CreateGymBrandModal
-        isOpen={isBrandModalOpen}
-        onClose={() => setIsBrandModalOpen(false)}
-      />
       <GymDetailModal
         brands={brands}
         isOpen={isGymModalOpen}

@@ -105,3 +105,31 @@ export async function createBrand({
 
   return data;
 }
+
+export type UpdateBrandRequest = CreateBrandRequest;
+
+export type UpdateBrandResponse = CreateBrandResponse;
+
+export async function updateBrand(
+  id: number,
+  { name, difficultyColorIds }: UpdateBrandRequest,
+): Promise<UpdateBrandResponse> {
+  const response = await fetch(`/api/brands/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      name,
+      difficultyColorIds,
+    }),
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message || "브랜드 수정에 실패하였습니다");
+  }
+
+  return data;
+}

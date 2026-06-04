@@ -1,12 +1,10 @@
 import { Plus, Search } from "lucide-react";
 
 type AdminGymHeaderProps = {
-  onCreateBrandClick: () => void;
   onCreateGymClick: () => void;
 };
 
 export default function AdminGymHeader({
-  onCreateBrandClick,
   onCreateGymClick,
 }: AdminGymHeaderProps) {
   return (
@@ -19,19 +17,11 @@ export default function AdminGymHeader({
 
         <input
           type="text"
-          placeholder="지점명, 브랜드명, 위치로 검색"
+          placeholder="지점명, 위치로 검색"
           className="w-full rounded-xl border border-outline-variant bg-background py-3 pl-12 pr-4 text-sm font-medium text-on-surface outline-none transition-all placeholder:text-on-surface-variant focus:border-primary focus:ring-2 focus:ring-primary"
         />
       </div>
       <div className="flex w-full gap-3 lg:w-auto">
-        <button
-          type="button"
-          onClick={onCreateBrandClick}
-          className="flex-1 whitespace-nowrap rounded-lg border border-primary px-5 py-2.5 text-sm font-medium text-primary transition-colors hover:bg-surface-container-low lg:flex-none"
-        >
-          암장 브랜드 등록
-        </button>
-
         <button
           type="button"
           onClick={onCreateGymClick}
