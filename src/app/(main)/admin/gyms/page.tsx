@@ -1,24 +1,27 @@
 import AdminGymClient from "./_components/admin-gym-client/AdminGymClient";
-import { dummyGymBranches, dummyGymBrands } from "./dummy-data";
+import { getAdminGymPageData } from "./queries";
 
-export default function AdminGymsPage() {
-  const gymlist = dummyGymBranches
-    .map((branch) => {
-      const brand = dummyGymBrands.find((item) => item.id === branch.brandId);
+type AdminGymsPageProps = {
+  searchParams: Promise<{
+    query?: string | string[];
+  }>;
+};
 
-      if (!brand) {
-        return null;
-      }
+export default async function AdminGymsPage({
+  searchParams,
+}: AdminGymsPageProps) {
+  const { query: queryParam } = await searchParams;
+  const query = Array.isArray(queryParam) ? queryParam[0] : queryParam;
+  const trimmedQuery = query?.trim();
+  const { brands, gymlist } = await getAdminGymPageData(trimmedQuery);
 
-      return {
-        ...branch,
-        brand,
-      };
-    })
-    .filter((branch) => branch !== null);
   return (
     <div className="space-y-xl px-gutter py-lg">
-      <AdminGymClient gymlist={gymlist} />
+      <AdminGymClient
+        brands={brands}
+        gymlist={gymlist}
+        query={trimmedQuery ?? ""}
+      />
     </div>
   );
 }
