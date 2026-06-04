@@ -14,18 +14,36 @@ export default function AdminBrandClient({
   query: string;
 }) {
   const [isBrandModalOpen, setIsBrandModalOpen] = useState(false);
+  const [selectedBrand, setSelectedBrand] = useState<AdminBrand | null>(null);
+
+  const handleCreateBrandClick = () => {
+    setSelectedBrand(null);
+    setIsBrandModalOpen(true);
+  };
+
+  const handleBrandClick = (brand: AdminBrand) => {
+    setSelectedBrand(brand);
+    setIsBrandModalOpen(true);
+  };
+
+  const handleBrandModalClose = () => {
+    setIsBrandModalOpen(false);
+    setSelectedBrand(null);
+  };
 
   return (
     <>
       <AdminBrandHeader
         query={query}
-        onCreateBrandClick={() => setIsBrandModalOpen(true)}
+        onCreateBrandClick={handleCreateBrandClick}
       />
-      <AdminBrandList brands={brands} />
+      <AdminBrandList brands={brands} onBrandClick={handleBrandClick} />
       <BrandFormModal
-        mode="create"
+        key={selectedBrand ? `edit-${selectedBrand.id}` : "create"}
+        mode={selectedBrand ? "edit" : "create"}
         isOpen={isBrandModalOpen}
-        onClose={() => setIsBrandModalOpen(false)}
+        initialBrand={selectedBrand}
+        onClose={handleBrandModalClose}
       />
     </>
   );

@@ -1,7 +1,15 @@
 import { AdminBrand } from "../../types/adminBrand";
 import AdminBrandItem from "./AdminBrandItem";
 
-export default function AdminBrandList({ brands }: { brands: AdminBrand[] }) {
+type AdminBrandListProps = {
+  brands: AdminBrand[];
+  onBrandClick: (brand: AdminBrand) => void;
+};
+
+export default function AdminBrandList({
+  brands,
+  onBrandClick,
+}: AdminBrandListProps) {
   return (
     <section className="overflow-hidden rounded-2xl border border-outline-variant bg-surface-container-lowest shadow-card">
       <table className="w-full border-collapse text-left">
@@ -22,7 +30,11 @@ export default function AdminBrandList({ brands }: { brands: AdminBrand[] }) {
         <tbody className="divide-y divide-outline-variant">
           {brands.length > 0 ? (
             brands.map((brand) => (
-              <AdminBrandItem key={brand.id} brand={brand} />
+              <AdminBrandItem
+                key={brand.id}
+                brand={brand}
+                onClick={() => onBrandClick(brand)}
+              />
             ))
           ) : (
             <tr>

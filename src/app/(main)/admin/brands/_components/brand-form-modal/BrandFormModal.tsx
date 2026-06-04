@@ -4,6 +4,7 @@ import useOutSideClick from "@/hooks/useOutSideClick";
 import { Building2, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { AdminBrand } from "../../types/adminBrand";
 import { createBrand } from "./api";
 import GradeColorSection from "./GradeColorSection";
 import { GradeColor } from "./types";
@@ -13,17 +14,26 @@ type BrandFormModalMode = "create" | "edit";
 type BrandFormModalProps = {
   mode: BrandFormModalMode;
   isOpen: boolean;
+  initialBrand?: AdminBrand | null;
   onClose: () => void;
 };
 
 export default function BrandFormModal({
   mode,
   isOpen,
+  initialBrand,
   onClose,
 }: BrandFormModalProps) {
   const router = useRouter();
-  const [brandName, setBrandName] = useState("");
-  const [selectedColors, setSelectedColors] = useState<GradeColor[]>([]);
+  const [brandName, setBrandName] = useState(initialBrand?.name ?? "");
+  const [selectedColors, setSelectedColors] = useState<GradeColor[]>(
+    () =>
+      initialBrand?.colors.map((brandColor) => ({
+        id: String(brandColor.difficultyColor.id),
+        name: brandColor.difficultyColor.name,
+        color: brandColor.difficultyColor.colorCode,
+      })) ?? [],
+  );
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -57,6 +67,11 @@ export default function BrandFormModal({
 
     if (hasInvalidDifficultyColorId) {
       setErrorMessage("올바른 난이도 색상을 선택해주세요.");
+      return;
+    }
+
+    if (mode === "edit") {
+      setErrorMessage("브랜드 수정 API 연결 후 수정할 수 있습니다.");
       return;
     }
 

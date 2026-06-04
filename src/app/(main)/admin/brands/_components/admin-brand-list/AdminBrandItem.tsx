@@ -1,8 +1,26 @@
 import { AdminBrand } from "../../types/adminBrand";
 
-export default function AdminBrandItem({ brand }: { brand: AdminBrand }) {
+type AdminBrandItemProps = {
+  brand: AdminBrand;
+  onClick: () => void;
+};
+
+export default function AdminBrandItem({
+  brand,
+  onClick,
+}: AdminBrandItemProps) {
   return (
-    <tr className="group transition-colors hover:bg-surface-bright">
+    <tr
+      tabIndex={0}
+      onClick={onClick}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          onClick();
+        }
+      }}
+      className="group cursor-pointer transition-colors hover:bg-surface-bright focus:bg-surface-bright focus:outline-none"
+    >
       <td className="whitespace-nowrap px-sm py-md font-headline font-semibold text-on-surface sm:px-lg">
         {brand.name}
       </td>
