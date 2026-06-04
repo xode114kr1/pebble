@@ -6,20 +6,20 @@ import { FormEvent, useMemo, useState } from "react";
 import { GymBrand } from "../../types/adminGym";
 import { createGymBranch, updateGymBranch } from "./api";
 
-type GymDetailModalMode = "create" | "edit";
+type GymFormModalMode = "create" | "edit";
 
-type GymDetailInitialData = {
+type GymFormInitialData = {
   id: number;
   brandId: number;
   branchName: string;
   location: string;
 };
 
-type GymDetailModalProps = {
-  mode: GymDetailModalMode;
+type GymFormModalProps = {
+  mode: GymFormModalMode;
   brands: GymBrand[];
   isOpen: boolean;
-  initialData?: GymDetailInitialData | null;
+  initialData?: GymFormInitialData | null;
   onClose: () => void;
   onCreated: () => void;
 };
@@ -31,14 +31,14 @@ type GymBranchFormErrors = {
   form?: string;
 };
 
-export default function GymDetailModal({
+export default function GymFormModal({
   mode,
   brands,
   isOpen,
   initialData,
   onClose,
   onCreated,
-}: GymDetailModalProps) {
+}: GymFormModalProps) {
   const [selectedBrandId, setSelectedBrandId] = useState(
     String(initialData?.brandId ?? brands[0]?.id ?? ""),
   );
@@ -215,7 +215,7 @@ function ModalHeader({
   mode,
   onClose,
 }: {
-  mode: GymDetailModalMode;
+  mode: GymFormModalMode;
   onClose: () => void;
 }) {
   const title = mode === "create" ? "암장 지점 등록" : "암장 지점 수정";
@@ -391,7 +391,7 @@ function ModalFooter({
   isSubmitting,
   onClose,
 }: {
-  mode: GymDetailModalMode;
+  mode: GymFormModalMode;
   isSubmitDisabled: boolean;
   isSubmitting: boolean;
   onClose: () => void;

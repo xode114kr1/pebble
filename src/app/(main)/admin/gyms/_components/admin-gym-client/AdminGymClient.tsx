@@ -5,7 +5,7 @@ import { useState } from "react";
 import { GymBranchWithBrand, GymBrand } from "../../types/adminGym";
 import AdminGymHeader from "../admin-gym-header/AdminGymHeader";
 import AdminGymList from "../admin-gym-list/AdminGymList";
-import GymDetailModal from "../gym-detail-modal/GymDetailModal";
+import GymFormModal from "../gym-form-modal/GymFormModal";
 
 export default function AdminGymClient({
   brands,
@@ -48,7 +48,7 @@ export default function AdminGymClient({
         onGymClick={handleGymClick}
       />
       {isGymModalOpen ? (
-        <GymDetailModal
+        <GymFormModal
           key={selectedGymBranch ? `edit-${selectedGymBranch.id}` : "create"}
           mode={selectedGymBranch ? "edit" : "create"}
           brands={brands}
