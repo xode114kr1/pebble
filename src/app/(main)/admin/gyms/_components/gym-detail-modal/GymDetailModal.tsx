@@ -46,7 +46,16 @@ export default function GymDetailModal({
   const [location, setLocation] = useState(initialData?.location ?? "");
   const [errors, setErrors] = useState<GymBranchFormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const modalRef = useOutSideClick<HTMLDivElement>(onClose, isOpen);
+
+  const handleClose = () => {
+    if (isSubmitting) {
+      return;
+    }
+
+    onClose();
+  };
+
+  const modalRef = useOutSideClick<HTMLDivElement>(handleClose, isOpen);
 
   const selectedBrand = useMemo(
     () => brands.find((brand) => String(brand.id) === selectedBrandId),
@@ -68,6 +77,10 @@ export default function GymDetailModal({
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    if (isSubmitting) {
+      return;
+    }
 
     const parsedBrandId = Number(selectedBrandId);
     const trimmedBranchName = branchName.trim();
@@ -137,7 +150,7 @@ export default function GymDetailModal({
         ref={modalRef}
         className="flex max-h-[88vh] w-[min(calc(100vw-32px),560px)] flex-col overflow-hidden rounded-2xl border border-outline-variant bg-surface-container-lowest shadow-2xl"
       >
-        <ModalHeader mode={mode} onClose={onClose} />
+        <ModalHeader mode={mode} onClose={handleClose} />
 
         <form onSubmit={handleSubmit} className="flex min-h-0 flex-col">
           <div className="space-y-6 overflow-y-auto px-6 py-6 sm:px-8">
@@ -190,7 +203,7 @@ export default function GymDetailModal({
             mode={mode}
             isSubmitDisabled={brands.length === 0 || isSubmitting}
             isSubmitting={isSubmitting}
-            onClose={onClose}
+            onClose={handleClose}
           />
         </form>
       </div>
@@ -391,7 +404,8 @@ function ModalFooter({
       <button
         type="button"
         onClick={onClose}
-        className="rounded-lg px-6 py-2.5 font-label text-label-md font-medium text-on-surface-variant transition-colors hover:bg-surface-container-high"
+        disabled={isSubmitting}
+        className="rounded-lg px-6 py-2.5 font-label text-label-md font-medium text-on-surface-variant transition-colors hover:bg-surface-container-high disabled:cursor-not-allowed disabled:opacity-60"
       >
         취소
       </button>
