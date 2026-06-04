@@ -4,7 +4,7 @@ import useOutSideClick from "@/hooks/useOutSideClick";
 import { Building2, MapPin, Palette, X } from "lucide-react";
 import { FormEvent, useMemo, useState } from "react";
 import { GymBrand } from "../../types/adminGym";
-import { createGymBranch } from "./api";
+import { createGymBranch, updateGymBranch } from "./api";
 
 type GymDetailModalMode = "create" | "edit";
 
@@ -96,15 +96,23 @@ export default function GymDetailModal({
       setErrors({});
 
       if (mode === "edit") {
-        setErrors({ form: "암장 지점 수정 기능은 아직 준비 중입니다." });
-        return;
-      }
+        if (!initialData) {
+          setErrors({ form: "수정할 암장 지점을 선택해주세요." });
+          return;
+        }
 
-      await createGymBranch({
-        brandId: parsedBrandId,
-        name: trimmedBranchName,
-        location: trimmedLocation,
-      });
+        await updateGymBranch(initialData.id, {
+          brandId: parsedBrandId,
+          name: trimmedBranchName,
+          location: trimmedLocation,
+        });
+      } else {
+        await createGymBranch({
+          brandId: parsedBrandId,
+          name: trimmedBranchName,
+          location: trimmedLocation,
+        });
+      }
 
       onCreated();
     } catch (error) {
@@ -112,7 +120,7 @@ export default function GymDetailModal({
         form:
           error instanceof Error
             ? error.message
-            : "암장 지점 등록에 실패하였습니다",
+            : `암장 지점 ${mode === "create" ? "등록" : "수정"}에 실패하였습니다`,
       });
     } finally {
       setIsSubmitting(false);
