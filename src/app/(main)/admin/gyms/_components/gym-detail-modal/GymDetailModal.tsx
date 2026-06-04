@@ -245,43 +245,42 @@ function TextField({
 function GradeColorSection({ brand }: { brand?: GymBrand }) {
   return (
     <section className="space-y-4">
-      <div className="flex items-center justify-between gap-3">
-        <div className="flex items-center gap-2 font-label text-label-md text-on-surface-variant">
-          <Palette size={18} className="text-primary" />
-          <span>Grade Color</span>
-        </div>
-
-        <span className="shrink-0 rounded-full bg-primary-container/20 px-2 py-0.5 font-label text-label-sm text-primary">
-          {brand?.gradeColors.length ?? 0}개
-        </span>
+      <div className="flex items-center gap-2 font-label text-label-md text-on-surface-variant">
+        <Palette size={18} className="text-primary" />
+        <span>Grade Color</span>
       </div>
 
-      <div className="flex min-h-20 flex-wrap gap-2.5 rounded-xl border border-outline-variant/50 bg-surface-container p-4">
-        {brand ? (
-          brand.gradeColors.map((gradeColor) => (
-            <div
-              key={gradeColor.id}
-              className="flex items-center gap-2 rounded-full border border-outline-variant bg-background py-1 pl-1 pr-3 shadow-sm"
-            >
-              <span
-                className="h-5 w-5 rounded-full border border-outline-variant"
-                style={{ backgroundColor: gradeColor.color }}
-              />
-              <span className="font-label text-label-md text-on-surface">
-                {gradeColor.name}
-              </span>
+      <div className="rounded-xl border border-outline-variant/50 bg-surface-container p-4">
+        {brand && brand.gradeColors.length > 0 ? (
+          <div className="flex items-center">
+            <div className="flex overflow-hidden shadow-[0_0_0_1px_rgba(0,0,0,0.12)]">
+              {brand.gradeColors.map((gradeColor, index) => (
+                <span
+                  key={gradeColor.id}
+                  className="h-8 w-10"
+                  style={{ backgroundColor: gradeColor.color }}
+                  title={`${index + 1}. ${gradeColor.name}`}
+                />
+              ))}
             </div>
-          ))
+          </div>
+        ) : brand ? (
+          <div className="flex min-h-16 items-center justify-center rounded-lg border border-dashed border-outline-variant bg-background px-4 py-5">
+            <p className="text-center text-body-sm text-on-surface-variant">
+              등록된 등급 색상이 없습니다.
+            </p>
+          </div>
         ) : (
-          <p className="text-body-sm text-on-surface-variant">
-            브랜드를 선택하면 등급 색상이 표시됩니다.
-          </p>
+          <div className="flex min-h-16 items-center justify-center rounded-lg border border-dashed border-outline-variant bg-background px-4 py-5">
+            <p className="text-center text-body-sm text-on-surface-variant">
+              브랜드를 선택하면 등급 색상이 표시됩니다.
+            </p>
+          </div>
         )}
       </div>
     </section>
   );
 }
-
 function ModalFooter({
   isSubmitDisabled,
   submitLabel,
