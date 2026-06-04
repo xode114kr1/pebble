@@ -24,12 +24,40 @@ function mapBrandToGymBrand(brand: {
   };
 }
 
-export async function getAdminGymPageData(): Promise<{
+export async function getAdminGymPageData(query?: string): Promise<{
   brands: GymBrand[];
   gymlist: GymBranchWithBrand[];
 }> {
+  const trimmedQuery = query?.trim();
+
   const [branches, brands] = await Promise.all([
     prisma.gymBranch.findMany({
+      where: trimmedQuery
+        ? {
+            OR: [
+              {
+                name: {
+                  contains: trimmedQuery,
+                  mode: "insensitive",
+                },
+              },
+              {
+                location: {
+                  contains: trimmedQuery,
+                  mode: "insensitive",
+                },
+              },
+              {
+                brand: {
+                  name: {
+                    contains: trimmedQuery,
+                    mode: "insensitive",
+                  },
+                },
+              },
+            ],
+          }
+        : undefined,
       orderBy: {
         createdAt: "desc",
       },

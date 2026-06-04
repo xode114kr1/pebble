@@ -20,6 +20,7 @@ function parsePositiveInteger(value: string | null) {
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
+    const query = searchParams.get("query")?.trim();
     const page = parsePositiveInteger(searchParams.get("page"));
     const pageSize = parsePositiveInteger(searchParams.get("pageSize"));
     const shouldPaginate = page !== null || pageSize !== null;
@@ -28,6 +29,32 @@ export async function GET(request: Request) {
       shouldPaginate && take !== undefined ? ((page ?? 1) - 1) * take : undefined;
 
     const gymBranches = await prisma.gymBranch.findMany({
+      where: query
+        ? {
+            OR: [
+              {
+                name: {
+                  contains: query,
+                  mode: "insensitive",
+                },
+              },
+              {
+                location: {
+                  contains: query,
+                  mode: "insensitive",
+                },
+              },
+              {
+                brand: {
+                  name: {
+                    contains: query,
+                    mode: "insensitive",
+                  },
+                },
+              },
+            ],
+          }
+        : undefined,
       orderBy: {
         createdAt: "desc",
       },

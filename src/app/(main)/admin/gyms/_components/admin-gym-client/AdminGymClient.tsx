@@ -10,16 +10,21 @@ import GymDetailModal from "../gym-detail-modal/GymDetailModal";
 export default function AdminGymClient({
   brands,
   gymlist,
+  query,
 }: {
   brands: GymBrand[];
   gymlist: GymBranchWithBrand[];
+  query: string;
 }) {
   const router = useRouter();
   const [isGymModalOpen, setIsGymModalOpen] = useState(false);
 
   return (
     <>
-      <AdminGymHeader onCreateGymClick={() => setIsGymModalOpen(true)} />
+      <AdminGymHeader
+        query={query}
+        onCreateGymClick={() => setIsGymModalOpen(true)}
+      />
       <AdminGymList gymlist={gymlist} />
       {isGymModalOpen ? (
         <GymDetailModal

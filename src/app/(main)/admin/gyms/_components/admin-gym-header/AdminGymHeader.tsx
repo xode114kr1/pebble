@@ -1,12 +1,43 @@
+"use client";
+
+import useDebounce from "@/hooks/useDebounce";
 import { Plus, Search } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { ChangeEvent, useEffect, useState } from "react";
 
 type AdminGymHeaderProps = {
+  query: string;
   onCreateGymClick: () => void;
 };
 
 export default function AdminGymHeader({
+  query,
   onCreateGymClick,
 }: AdminGymHeaderProps) {
+  const router = useRouter();
+  const [keyword, setKeyword] = useState(query);
+  const debouncedKeyword = useDebounce(keyword, 300);
+
+  const handleKeywordChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setKeyword(event.target.value);
+  };
+
+  useEffect(() => {
+    const trimmedKeyword = debouncedKeyword.trim();
+    const trimmedQuery = query.trim();
+
+    if (trimmedKeyword === trimmedQuery) {
+      return;
+    }
+
+    if (!trimmedKeyword) {
+      router.push("/admin/gyms");
+      return;
+    }
+
+    router.push(`/admin/gyms?query=${encodeURIComponent(trimmedKeyword)}`);
+  }, [debouncedKeyword, query, router]);
+
   return (
     <header className="mb-8 flex flex-col gap-4 rounded-2xl border border-outline-variant bg-surface-container-lowest p-6 shadow-sm lg:flex-row lg:items-center lg:justify-between">
       <div className="relative w-full lg:w-105">
@@ -16,8 +47,11 @@ export default function AdminGymHeader({
         />
 
         <input
+          name="query"
           type="text"
-          placeholder="지점명, 위치로 검색"
+          value={keyword}
+          onChange={handleKeywordChange}
+          placeholder="브랜드명, 지점명, 위치로 검색"
           className="w-full rounded-xl border border-outline-variant bg-background py-3 pl-12 pr-4 text-sm font-medium text-on-surface outline-none transition-all placeholder:text-on-surface-variant focus:border-primary focus:ring-2 focus:ring-primary"
         />
       </div>
