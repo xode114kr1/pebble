@@ -1,11 +1,11 @@
 import GradeColorDot from "@/components/grade-color-dot/GradeColorDot";
-import { GymBranchWithBrand } from "../../types/adminGym";
+import { GymBranchListItem } from "@/types/gym";
 
 export default function AdminGymItem({
   branch,
   onClick,
 }: {
-  branch: GymBranchWithBrand;
+  branch: GymBranchListItem;
   onClick: () => void;
 }) {
   return (

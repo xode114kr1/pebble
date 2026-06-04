@@ -1,10 +1,10 @@
 "use client";
 
 import useOutSideClick from "@/hooks/useOutSideClick";
+import { GymBrandSummary } from "@/types/gym";
 import { Building2, MapPin, Palette, X } from "lucide-react";
 import { FormEvent, useMemo, useState } from "react";
 import { createGymBranch, updateGymBranch } from "../../api";
-import { GymBrand } from "../../types/adminGym";
 
 type GymFormModalMode = "create" | "edit";
 
@@ -17,7 +17,7 @@ type GymFormInitialData = {
 
 type GymFormModalProps = {
   mode: GymFormModalMode;
-  brands: GymBrand[];
+  brands: GymBrandSummary[];
   isOpen: boolean;
   initialData?: GymFormInitialData | null;
   onClose: () => void;
@@ -248,7 +248,7 @@ function BrandSelect({
   errorMessage,
   onChange,
 }: {
-  brands: GymBrand[];
+  brands: GymBrandSummary[];
   selectedBrandId: string;
   errorMessage?: string;
   onChange: (brandId: string) => void;
@@ -346,7 +346,7 @@ function TextField({
   );
 }
 
-function GradeColorSection({ brand }: { brand?: GymBrand }) {
+function GradeColorSection({ brand }: { brand?: GymBrandSummary }) {
   return (
     <section className="space-y-4">
       <div className="flex items-center gap-2 font-label text-label-md text-on-surface-variant">

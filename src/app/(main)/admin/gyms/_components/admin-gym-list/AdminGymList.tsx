@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { GymBranchWithBrand } from "../../types/adminGym";
+import { GymBranchListItem } from "@/types/gym";
 import AdminGymItem from "./AdminGymItem";
 
 export default function AdminGymList({
@@ -7,9 +7,9 @@ export default function AdminGymList({
   query,
   onGymClick,
 }: {
-  gymlist: GymBranchWithBrand[];
+  gymlist: GymBranchListItem[];
   query: string;
-  onGymClick: (gymBranch: GymBranchWithBrand) => void;
+  onGymClick: (gymBranch: GymBranchListItem) => void;
 }) {
   const hasSearchQuery = Boolean(query.trim());
 

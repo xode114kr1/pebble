@@ -1,8 +1,8 @@
 import { prisma } from "@/lib/prisma";
+import { GymBranchListItem, GymBrandSummary } from "@/types/gym";
 import { formatDateKey } from "@/utils/date";
-import { GymBrand, GymBranchWithBrand } from "./types/adminGym";
 
-function mapBrandToGymBrand(brand: {
+function mapBrandToGymBrandSummary(brand: {
   id: number;
   name: string;
   colors: {
@@ -12,7 +12,7 @@ function mapBrandToGymBrand(brand: {
       colorCode: string;
     };
   }[];
-}): GymBrand {
+}): GymBrandSummary {
   return {
     id: brand.id,
     name: brand.name,
@@ -25,8 +25,8 @@ function mapBrandToGymBrand(brand: {
 }
 
 export async function getAdminGymPageData(query?: string): Promise<{
-  brands: GymBrand[];
-  gymlist: GymBranchWithBrand[];
+  brands: GymBrandSummary[];
+  gymlist: GymBranchListItem[];
 }> {
   const trimmedQuery = query?.trim();
 
@@ -106,14 +106,14 @@ export async function getAdminGymPageData(query?: string): Promise<{
   ]);
 
   return {
-    brands: brands.map(mapBrandToGymBrand),
+    brands: brands.map(mapBrandToGymBrandSummary),
     gymlist: branches.map((branch) => ({
       id: branch.id,
       brandId: branch.brandId,
       branchName: branch.name,
       location: branch.location,
       createdAt: formatDateKey(branch.createdAt),
-      brand: mapBrandToGymBrand(branch.brand),
+      brand: mapBrandToGymBrandSummary(branch.brand),
     })),
   };
 }
