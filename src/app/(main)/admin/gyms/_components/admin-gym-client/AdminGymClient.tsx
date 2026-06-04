@@ -25,7 +25,7 @@ export default function AdminGymClient({
         query={query}
         onCreateGymClick={() => setIsGymModalOpen(true)}
       />
-      <AdminGymList gymlist={gymlist} />
+      <AdminGymList gymlist={gymlist} query={query} />
       {isGymModalOpen ? (
         <GymDetailModal
           brands={brands}
