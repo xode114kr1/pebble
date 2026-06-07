@@ -1,5 +1,16 @@
 import { MapPin } from "lucide-react";
-import { GymPreview } from "../../types";
+import { GymBranchListItem } from "@/types/gym";
+
+const DEFAULT_DISTRIBUTIONS = {
+  difficulty: {
+    leftPercentage: 50,
+    rightPercentage: 50,
+  },
+  movement: {
+    leftPercentage: 50,
+    rightPercentage: 50,
+  },
+};
 
 function DistributionBar({
   leftLabel,
@@ -36,12 +47,12 @@ function DistributionBar({
   );
 }
 
-export default function GymCard({ gym }: { gym: GymPreview }) {
+export default function GymCard({ gym }: { gym: GymBranchListItem }) {
   return (
     <article className="group flex min-h-80 flex-col rounded-lg border border-outline-variant bg-card p-lg shadow-card transition-all hover:-translate-y-0.5 hover:border-primary-container hover:shadow-card-hover">
       <div className="min-w-0">
         <h3 className="font-headline text-xl font-semibold text-on-surface transition-colors group-hover:text-primary">
-          {gym.name}
+          {gym.brand.name} {gym.branchName}
         </h3>
         <div className="body-sm mt-xs flex items-start gap-xs text-on-surface-variant">
           <MapPin size={15} className="mt-0.5 shrink-0" />
@@ -53,11 +64,12 @@ export default function GymCard({ gym }: { gym: GymPreview }) {
         className="mt-lg flex flex-wrap gap-sm border-y border-outline-variant py-md"
         aria-label="암장 난이도 색상"
       >
-        {gym.gradeColors.map((color) => (
+        {gym.brand.gradeColors.map((color) => (
           <span
-            key={color}
+            key={color.id}
+            title={color.name}
             className="size-6 rounded-full border-2 border-white shadow-[0_0_0_1px_rgba(0,0,0,0.16)]"
-            style={{ backgroundColor: color }}
+            style={{ backgroundColor: color.color }}
           />
         ))}
       </div>
@@ -65,18 +77,17 @@ export default function GymCard({ gym }: { gym: GymPreview }) {
       <div className="mt-lg space-y-lg">
         <DistributionBar
           leftLabel="쉬움"
-          leftPercentage={gym.easyPercentage}
+          leftPercentage={DEFAULT_DISTRIBUTIONS.difficulty.leftPercentage}
           rightLabel="어려움"
-          rightPercentage={gym.hardPercentage}
+          rightPercentage={DEFAULT_DISTRIBUTIONS.difficulty.rightPercentage}
         />
         <DistributionBar
           leftLabel="스테틱"
-          leftPercentage={gym.staticPercentage}
+          leftPercentage={DEFAULT_DISTRIBUTIONS.movement.leftPercentage}
           rightLabel="다이나믹"
-          rightPercentage={gym.dynamicPercentage}
+          rightPercentage={DEFAULT_DISTRIBUTIONS.movement.rightPercentage}
         />
       </div>
-
     </article>
   );
 }

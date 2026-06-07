@@ -1,8 +1,10 @@
+import { getGymBranches } from "@/services/gymBranch.server";
 import GymGrid from "./_components/gym-grid/GymGrid";
 import GymSearchHeader from "./_components/gym-search-header/GymSearchHeader";
-import { gyms } from "./constants/gyms";
 
-export default function GymPage() {
+export default async function GymPage() {
+  const gyms = await getGymBranches();
+
   return (
     <>
       <GymSearchHeader />
