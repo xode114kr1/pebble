@@ -18,7 +18,7 @@ export default async function GymPage({ searchParams }: GymPageProps) {
     <>
       <GymSearchHeader query={trimmedQuery ?? ""} />
       <div className="mx-auto w-full max-w-7xl px-gutter py-lg">
-        <GymGrid gyms={gyms} />
+        <GymGrid gyms={gyms} query={trimmedQuery ?? ""} />
       </div>
     </>
   );
