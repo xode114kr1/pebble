@@ -1,6 +1,6 @@
 "use client";
 
-import { getDifficultyColors } from "@/services/brandColor";
+import { getDifficultyColors } from "@/services/difficultyColor";
 import { Palette, Plus, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import CreateColorModal from "./CreateColorModal";

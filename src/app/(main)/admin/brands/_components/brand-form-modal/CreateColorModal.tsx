@@ -1,7 +1,7 @@
 "use client";
 
 import useOutSideClick from "@/hooks/useOutSideClick";
-import { createDifficultyColor } from "@/services/brandColor";
+import { createDifficultyColor } from "@/services/difficultyColor";
 import { X } from "lucide-react";
 import { useState } from "react";
 

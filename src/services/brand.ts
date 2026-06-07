@@ -1,4 +1,4 @@
-import { DifficultyColorResponse } from "./brandColor";
+import { DifficultyColorResponse } from "./difficultyColor";
 
 export type CreateBrandRequest = {
   name: string;
