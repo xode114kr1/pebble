@@ -1,11 +1,11 @@
 "use client";
 
 import useOutSideClick from "@/hooks/useOutSideClick";
+import { createBrand, updateBrand } from "@/services/brand";
+import { AdminGymBrand } from "@/types/gym";
 import { Building2, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { AdminBrand } from "../../types/adminBrand";
-import { createBrand, updateBrand } from "./api";
 import GradeColorSection from "./GradeColorSection";
 import { GradeColor } from "./types";
 
@@ -14,11 +14,11 @@ type BrandFormModalMode = "create" | "edit";
 type BrandFormModalProps = {
   mode: BrandFormModalMode;
   isOpen: boolean;
-  initialBrand?: AdminBrand | null;
+  initialBrand?: AdminGymBrand | null;
   onClose: () => void;
 };
 
-function getInitialSelectedColors(initialBrand?: AdminBrand | null) {
+function getInitialSelectedColors(initialBrand?: AdminGymBrand | null) {
   return (
     initialBrand?.colors.map((brandColor) => ({
       id: String(brandColor.difficultyColor.id),

@@ -1,7 +1,7 @@
-import { AdminBrand } from "../../types/adminBrand";
+import { AdminGymBrand } from "@/types/gym";
 
 type AdminBrandItemProps = {
-  brand: AdminBrand;
+  brand: AdminGymBrand;
   onClick: () => void;
 };
 

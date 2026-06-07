@@ -1,5 +1,5 @@
+import { getAdminGymPageData } from "@/services/gymBranch.server";
 import AdminGymClient from "./_components/admin-gym-client/AdminGymClient";
-import { getAdminGymPageData } from "./queries";
 
 type AdminGymsPageProps = {
   searchParams: Promise<{

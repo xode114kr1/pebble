@@ -1,9 +1,9 @@
 "use client";
 
 import useOutSideClick from "@/hooks/useOutSideClick";
+import { createDifficultyColor } from "@/services/brandColor";
 import { X } from "lucide-react";
 import { useState } from "react";
-import { createDifficultyColor } from "./api";
 
 type CreateColorModalProps = {
   isOpen: boolean;

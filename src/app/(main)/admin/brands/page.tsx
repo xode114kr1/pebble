@@ -1,5 +1,4 @@
-import { prisma } from "@/lib/prisma";
-import { formatDateKey } from "@/utils/date";
+import { getAdminGymBrands } from "@/services/brand.server";
 import AdminBrandClient from "./_components/admin-brand-client/AdminBrandClient";
 
 type AdminBrandsPageProps = {
@@ -14,52 +13,11 @@ export default async function AdminBrandsPage({
   const { query: queryParam } = await searchParams;
   const query = Array.isArray(queryParam) ? queryParam[0] : queryParam;
   const trimmedQuery = query?.trim();
-
-  const brands = await prisma.brand.findMany({
-    where: trimmedQuery
-      ? {
-          name: {
-            contains: trimmedQuery,
-            mode: "insensitive",
-          },
-        }
-      : undefined,
-    orderBy: {
-      createdAt: "desc",
-    },
-    select: {
-      id: true,
-      name: true,
-      createdAt: true,
-      updatedAt: true,
-      colors: {
-        orderBy: {
-          order: "asc",
-        },
-        select: {
-          id: true,
-          order: true,
-          difficultyColor: {
-            select: {
-              id: true,
-              name: true,
-              colorCode: true,
-            },
-          },
-        },
-      },
-    },
-  });
-
-  const brandItems = brands.map((brand) => ({
-    ...brand,
-    createdAt: formatDateKey(brand.createdAt),
-    updatedAt: formatDateKey(brand.updatedAt),
-  }));
+  const brands = await getAdminGymBrands(trimmedQuery);
 
   return (
     <div className="space-y-xl px-gutter py-lg">
-      <AdminBrandClient brands={brandItems} query={trimmedQuery ?? ""} />
+      <AdminBrandClient brands={brands} query={trimmedQuery ?? ""} />
     </div>
   );
 }

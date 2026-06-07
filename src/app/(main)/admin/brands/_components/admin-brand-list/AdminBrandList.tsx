@@ -1,9 +1,9 @@
-import { AdminBrand } from "../../types/adminBrand";
+import { AdminGymBrand } from "@/types/gym";
 import AdminBrandItem from "./AdminBrandItem";
 
 type AdminBrandListProps = {
-  brands: AdminBrand[];
-  onBrandClick: (brand: AdminBrand) => void;
+  brands: AdminGymBrand[];
+  onBrandClick: (brand: AdminGymBrand) => void;
 };
 
 export default function AdminBrandList({

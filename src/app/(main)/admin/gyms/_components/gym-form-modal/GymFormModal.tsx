@@ -1,10 +1,10 @@
 "use client";
 
 import useOutSideClick from "@/hooks/useOutSideClick";
+import { createGymBranch, updateGymBranch } from "@/services/gymBranch";
 import { GymBrandSummary } from "@/types/gym";
 import { Building2, MapPin, Palette, X } from "lucide-react";
 import { FormEvent, useMemo, useState } from "react";
-import { createGymBranch, updateGymBranch } from "../../api";
 
 type GymFormModalMode = "create" | "edit";
 
