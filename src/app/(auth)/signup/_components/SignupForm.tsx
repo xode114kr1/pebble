@@ -1,4 +1,6 @@
 "use client";
+
+import { signupUser } from "@/services/user";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
@@ -38,30 +40,20 @@ export default function SignupForm() {
     try {
       setIsSubmitting(true);
 
-      const res = await fetch("/api/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          nickname,
-          password,
-        }),
+      await signupUser({
+        email,
+        nickname,
+        password,
       });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        setErrorMessage(data.message || "회원가입에 실패했습니다.");
-        return;
-      }
 
       router.push("/login");
       router.refresh();
     } catch (error) {
-      console.error(error);
-      setErrorMessage("회원가입 중 오류가 발생했습니다.");
+      setErrorMessage(
+        error instanceof Error
+          ? error.message
+          : "회원가입 중 오류가 발생했습니다.",
+      );
     } finally {
       setIsSubmitting(false);
     }

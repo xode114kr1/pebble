@@ -1,8 +1,8 @@
 "use client";
 
+import { getDifficultyColors } from "@/services/difficultyColor";
 import { Palette, Plus, Search } from "lucide-react";
 import { useEffect, useState } from "react";
-import { getDifficultyColors } from "./api";
 import CreateColorModal from "./CreateColorModal";
 import GradeColorItem from "./GradeColorItem";
 import GradeColorSearchDropdown from "./GradeColorSearchDropdown";

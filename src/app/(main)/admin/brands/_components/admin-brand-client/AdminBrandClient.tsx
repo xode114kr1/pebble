@@ -1,7 +1,7 @@
 "use client";
 
+import { AdminGymBrand } from "@/types/gym";
 import { useState } from "react";
-import { AdminBrand } from "../../types/adminBrand";
 import AdminBrandHeader from "../admin-brand-header/AdminBrandHeader";
 import AdminBrandList from "../admin-brand-list/AdminBrandList";
 import BrandFormModal from "../brand-form-modal/BrandFormModal";
@@ -10,18 +10,20 @@ export default function AdminBrandClient({
   brands,
   query,
 }: {
-  brands: AdminBrand[];
+  brands: AdminGymBrand[];
   query: string;
 }) {
   const [isBrandModalOpen, setIsBrandModalOpen] = useState(false);
-  const [selectedBrand, setSelectedBrand] = useState<AdminBrand | null>(null);
+  const [selectedBrand, setSelectedBrand] = useState<AdminGymBrand | null>(
+    null,
+  );
 
   const handleCreateBrandClick = () => {
     setSelectedBrand(null);
     setIsBrandModalOpen(true);
   };
 
-  const handleBrandClick = (brand: AdminBrand) => {
+  const handleBrandClick = (brand: AdminGymBrand) => {
     setSelectedBrand(brand);
     setIsBrandModalOpen(true);
   };

@@ -21,3 +21,21 @@ export type GymBranch = {
 export type GymBranchListItem = GymBranch & {
   brand: GymBrandSummary;
 };
+
+export type AdminGymBrandColor = {
+  id: number;
+  order: number;
+  difficultyColor: {
+    id: number;
+    name: string;
+    colorCode: string;
+  };
+};
+
+export type AdminGymBrand = {
+  id: number;
+  name: string;
+  colors: AdminGymBrandColor[];
+  createdAt: string;
+  updatedAt: string;
+};
