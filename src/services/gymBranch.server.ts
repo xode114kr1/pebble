@@ -24,64 +24,81 @@ function mapBrandToGymBrandSummary(brand: {
   };
 }
 
-export async function getAdminGymPageData(query?: string): Promise<{
-  brands: GymBrandSummary[];
-  gymlist: GymBranchListItem[];
-}> {
+export async function getGymBranches(
+  query?: string,
+): Promise<GymBranchListItem[]> {
   const trimmedQuery = query?.trim();
 
-  const [branches, brands] = await Promise.all([
-    prisma.gymBranch.findMany({
-      where: trimmedQuery
-        ? {
-            OR: [
-              {
+  const branches = await prisma.gymBranch.findMany({
+    where: trimmedQuery
+      ? {
+          OR: [
+            {
+              name: {
+                contains: trimmedQuery,
+                mode: "insensitive",
+              },
+            },
+            {
+              location: {
+                contains: trimmedQuery,
+                mode: "insensitive",
+              },
+            },
+            {
+              brand: {
                 name: {
                   contains: trimmedQuery,
                   mode: "insensitive",
                 },
               },
-              {
-                location: {
-                  contains: trimmedQuery,
-                  mode: "insensitive",
-                },
-              },
-              {
-                brand: {
-                  name: {
-                    contains: trimmedQuery,
-                    mode: "insensitive",
-                  },
-                },
-              },
-            ],
-          }
-        : undefined,
-      orderBy: {
-        createdAt: "desc",
-      },
-      include: {
-        brand: {
-          include: {
-            colors: {
-              orderBy: {
-                order: "asc",
-              },
-              include: {
-                difficultyColor: {
-                  select: {
-                    id: true,
-                    name: true,
-                    colorCode: true,
-                  },
+            },
+          ],
+        }
+      : undefined,
+    orderBy: {
+      createdAt: "desc",
+    },
+    include: {
+      brand: {
+        include: {
+          colors: {
+            orderBy: {
+              order: "asc",
+            },
+            include: {
+              difficultyColor: {
+                select: {
+                  id: true,
+                  name: true,
+                  colorCode: true,
                 },
               },
             },
           },
         },
       },
-    }),
+    },
+  });
+
+  return branches.map((branch) => ({
+    id: branch.id,
+    brandId: branch.brandId,
+    branchName: branch.name,
+    location: branch.location,
+    createdAt: formatDateKey(branch.createdAt),
+    brand: mapBrandToGymBrandSummary(branch.brand),
+  }));
+}
+
+export async function getAdminGymPageData(query?: string): Promise<{
+  brands: GymBrandSummary[];
+  gymlist: GymBranchListItem[];
+}> {
+  const trimmedQuery = query?.trim();
+
+  const [gymlist, brands] = await Promise.all([
+    getGymBranches(trimmedQuery),
     prisma.brand.findMany({
       orderBy: {
         name: "asc",
@@ -107,13 +124,6 @@ export async function getAdminGymPageData(query?: string): Promise<{
 
   return {
     brands: brands.map(mapBrandToGymBrandSummary),
-    gymlist: branches.map((branch) => ({
-      id: branch.id,
-      brandId: branch.brandId,
-      branchName: branch.name,
-      location: branch.location,
-      createdAt: formatDateKey(branch.createdAt),
-      brand: mapBrandToGymBrandSummary(branch.brand),
-    })),
+    gymlist,
   };
 }
